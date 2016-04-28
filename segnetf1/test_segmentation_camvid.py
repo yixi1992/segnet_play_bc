@@ -36,7 +36,10 @@ acc=[]
 for i in range(0, args.iter):
 		
 	net.forward()
-	print i
+	#print i
+	#for ii in range(0, len(net.params['conv1_flow'])):
+	#	print ii, np.sum(net.params['conv1_flow'][ii].data**2)
+	
 	image = net.blobs['data'].data
 	label = net.blobs['label'].data
 	predicted = net.blobs['prob'].data
@@ -45,6 +48,34 @@ for i in range(0, args.iter):
 	output = np.squeeze(predicted[0,:,:,:])
 	ind = np.argmax(output, axis=0)
 	ind = np.array(ind, dtype=np.uint8)
+
+	o = findsource(label, ind)
+	if o==-1:
+		print 'err cannot find original file for data ',i
+		exit(1)
+
+	def findsource(image, label):
+		input_source='/scratch/groups/lsdavis/yixi/segnet/CamVid/test.txt'
+		for line in open(input_source,'r'):
+			files = line.rstrip('\n').split(' ')
+			im_file = files[0]
+			annot_file = files[1]
+
+			gt_l = np.array(Image.open(annot_file))
+
+			im = np.array(Image.open(im_file))
+			im = im[:,:,::-1]
+			im = im.transpose((2,0,1))
+			
+			image_dis = np.sum((image[:3,:,:]-im)**2)
+			label_dis = np.sum((label-gt_l)**2)
+			print 'data',i,'file',im_file, 'image_dis=',image_dis, 'label_dis=',label_dis	
+			if image_dis<1e-6 && label_dis<1e-6:
+				return im_file
+		return -1	
+
+
+
 
 	IMAGE_FILE = os.path.join(outputs, str(i))
 
