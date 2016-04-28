@@ -1,6 +1,6 @@
 net: "segnet_basic_train.prototxt"  		# Change this to the absolute path to your model file
 test_initialization: true
-test_iter: 25
+test_iter: 101
 test_interval: 100
 base_lr: 1e-3
 lr_policy: "fixed"
