@@ -2,8 +2,8 @@ net: "segnet_basic_train.prototxt"  		# Change this to the absolute path to your
 test_initialization: true
 test_iter: 25
 test_interval: 100
-base_lr: 1e-3
-lr_policy: "step"
+base_lr: 1e-4
+lr_policy: "fixed"
 gamma: 0.9
 stepsize: 100
 display: 20
@@ -11,6 +11,6 @@ display: 20
 max_iter: 100000
 weight_decay: 0.0005
 snapshot: 100
-snapshot_prefix: "snapshots/lr1e-3gamma0.9sz100adagrad"  	# Change this to the absolute path to where you wish to output solver snapshots
+snapshot_prefix: "snapshots/lr1e-4fixedadagrad"  	# Change this to the absolute path to where you wish to output solver snapshots
 solver_mode: GPU 
 solver_type: ADAGRAD
