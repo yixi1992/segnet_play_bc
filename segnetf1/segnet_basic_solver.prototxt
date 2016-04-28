@@ -11,5 +11,6 @@ momentum: 0.9
 max_iter: 100000
 weight_decay: 0.0005
 snapshot: 100
-snapshot_prefix: "snapshots/lr1e-3gamma0.9sz100"  	# Change this to the absolute path to where you wish to output solver snapshots
+snapshot_prefix: "snapshots/lr1e-3gamma0.9sz100adagrad"  	# Change this to the absolute path to where you wish to output solver snapshots
 solver_mode: GPU
+solver_type: ADAGRAD
