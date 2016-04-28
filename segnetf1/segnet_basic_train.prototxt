@@ -15,7 +15,7 @@ layer {
   }
   data_param {
     source: "camvidtrainvalfmp480360f1np_lmdb/train-lmdb"
-    batch_size: 1
+    batch_size: 4
     backend: LMDB
   }
 }
@@ -28,7 +28,7 @@ layer {
   }
   data_param {
     source: "camvidtrainvalfmp480360f1np_lmdb/train-label-lmdb"
-    batch_size: 1
+    batch_size: 4
     backend: LMDB
   }
 }
@@ -48,7 +48,7 @@ layer {
   }
   data_param {
     source: "camvidtrainvalfmp480360f1np_lmdb/val-lmdb"
-    batch_size: 1
+    batch_size: 4
     backend: LMDB
   }
 }
@@ -61,7 +61,7 @@ layer {
   }
   data_param {
     source: "camvidtrainvalfmp480360f1np_lmdb/val-label-lmdb"
-    batch_size: 1
+    batch_size: 4
     backend: LMDB
   }
 }
