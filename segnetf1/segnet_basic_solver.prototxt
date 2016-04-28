@@ -2,14 +2,14 @@ net: "segnet_basic_train.prototxt"  		# Change this to the absolute path to your
 test_initialization: true
 test_iter: 25
 test_interval: 100
-base_lr: 1e-6
+base_lr: 1e-3
 lr_policy: "step"
-gamma: 1.0
-stepsize: 10000000
+gamma: 0.9
+stepsize: 100
 display: 20
 momentum: 0.9
 max_iter: 100000
 weight_decay: 0.0005
 snapshot: 100
-snapshot_prefix: "snapshots/lr1e-6"  	# Change this to the absolute path to where you wish to output solver snapshots
+snapshot_prefix: "snapshots/lr1e-3gamma0.9sz100"  	# Change this to the absolute path to where you wish to output solver snapshots
 solver_mode: GPU
