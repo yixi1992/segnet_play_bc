@@ -13,7 +13,7 @@ layer {
   }
   data_param {
     source: "camvidtrainvalfmp480360f1np_lmdb/train-lmdb"
-    batch_size: 1
+    batch_size: 4
     backend: LMDB
   }
 }
@@ -30,7 +30,7 @@ layer {
   }
   data_param {
     source: "camvidtrainvalfmp480360f1np_lmdb/train-flow-lmdb"
-    batch_size: 1
+    batch_size: 4
     backend: LMDB
   }
 }
@@ -43,7 +43,7 @@ layer {
   }
   data_param {
     source: "camvidtrainvalfmp480360f1np_lmdb/train-label-lmdb"
-    batch_size: 1
+    batch_size: 4
     backend: LMDB
   }
 }
@@ -61,7 +61,7 @@ layer {
   }
   data_param {
     source: "camvidtrainvalfmp480360f1np_lmdb/val-lmdb"
-    batch_size: 1
+    batch_size: 4
     backend: LMDB
   }
 }
@@ -78,7 +78,7 @@ layer {
   }
   data_param {
     source: "camvidtrainvalfmp480360f1np_lmdb/val-flow-lmdb"
-    batch_size: 1
+    batch_size: 4
     backend: LMDB
   }
 }
@@ -91,15 +91,15 @@ layer {
   }
   data_param {
     source: "camvidtrainvalfmp480360f1np_lmdb/val-label-lmdb"
-    batch_size: 1
+    batch_size: 4
     backend: LMDB
   }
 }
 layer {
-  name: "norm"
+  name: "normdata"
   type: "LRN"
   bottom: "data"
-  top: "norm"
+  top: "normdata"
   lrn_param {
     local_size: 5
     alpha: 0.0001
@@ -120,7 +120,7 @@ layer {
 }
 layer {
 	name: "concat" 
-	bottom: "norm" 
+	bottom: "normdata" 
 	bottom: "normflow" 
 	top: "norm" 
 	type: "Concat" 
