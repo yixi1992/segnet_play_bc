@@ -1,15 +1,16 @@
 net: "segnet_basic_whole_train.prototxt"  		# Change this to the absolute path to your model file
 test_initialization: true
-test_iter: 233
+test_iter: 60
 test_interval: 100
 base_lr: 1e-4
-lr_policy: "step"
+lr_policy: "fixed"
 gamma: 0.5
 stepsize: 1000
 display: 20
-momentum: 0.9
-max_iter: 100000
+#momentum: 0.9
+max_iter: 10000
 weight_decay: 0.0005
 snapshot: 100
-snapshot_prefix: "snapshots_whole/lr1e-4gamma0.5"  	# Change this to the absolute path to where you wish to output solver snapshots
+snapshot_prefix: "snapshots_whole/gglr1e-4fixed"  	# Change this to the absolute path to where you wish to output solver snapshots
 solver_mode: GPU
+#solver_type: ADAGRAD
