@@ -6,7 +6,7 @@ layer {
   top: "label"
   dense_image_data_param {
     source: "/scratch/groups/lsdavis/yixi/segnet/CamVid/train.txt"	# Change this to the absolute path to your data file
-    batch_size: 10
+    batch_size: 4
     shuffle: true
   }
 }
