@@ -20,6 +20,14 @@
  #--weights snapshots_whole/gglr1e-4fixedadagrad_iter_100.caffemodel\
 #snapshots_whole/ftrgbgglr1e-4fixed_iter_100.caffemodel
 
+xixi='bs10lr0.1'
+iter=4900
+
+mkdir ${xixi}_iter_${iter}
+
+python compute_bn_statistics.py segnet_basic_train.prototxt snapshots/${xixi}_iter_${iter}.caffemodel inference/${xixi}_iter_${iter}/
+
+
 module load matlab
 : <<'END'
 n=0
@@ -32,14 +40,13 @@ python test_segmentation_camvid.py\
 END
 
 
-xixi='lr0.1'
-for n in {1000..10000..1000}
+for ((n=$iter; n<=$iter; n+=100))
 do
-		python test_segmentation_camvid.py\
+	rm predictions/inf_${xixi}_iter_${n}/ -r -f
+	python test_segmentation_camvid.py\
 		 --model segnet_basic_inference2.prototxt\
-		 --weights snapshots/${xixi}_iter_${n}.caffemodel\
-		 --iter 233\
+ 		--weights inference/${xixi}_iter_${n}/test_weights.caffemodel \
+		 --iter 233 \
 		 --output predictions/inf_${xixi}_iter_${n}/
 	matlab -nosplash -nodisplay -r "gtPath = 'predictions/inf_${xixi}_iter_${n}/*_gt.png'; predPath = 'predictions/inf_${xixi}_iter_${n}/*_pr.png'; run('compute_test_results'); exit"
 done
-END

@@ -1,16 +1,16 @@
-net: "segnet_basic_train.prototxt"  		# Change this to the absolute path to your model file
+net: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/segnet_basic_train_batchsize.prototxt"
 test_initialization: true
-test_iter: 25
+test_iter: 10
 test_interval: 100
-base_lr: 1e-4
+base_lr: 1e-3
 lr_policy: "fixed"
 gamma: 0.9
 stepsize: 100
 display: 20
 #momentum: 0.9
-max_iter: 10000
-weight_decay: 0.005
-snapshot: 100
-snapshot_prefix: "snapshots/gglr1e-5w0.005fixed"  	# Change this to the absolute path to where you wish to output solver snapshots
+max_iter: 20000
+weight_decay: 0.0005
+snapshot: 1000
+snapshot_prefix: "/home-4/yixi@umd.edu/segnet/snapshots/trgbbs10learngglr1e-3fixed"
 solver_mode: GPU 
 #solver_type: ADAGRAD

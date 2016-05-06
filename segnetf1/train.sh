@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -t 0:30:00
+#SBATCH -t 10:00:00
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH --mail-user=yixi@cs.umd.edu

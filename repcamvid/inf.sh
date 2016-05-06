@@ -32,12 +32,14 @@ python test_segmentation_camvid.py\
 END
 
 
+#--weights snapshots/${xixi}_iter_${n}.caffemodel\
 xixi='lr0.1'
-for n in {1000..10000..1000}
+for n in {9000..9000..1000}
 do
-		python test_segmentation_camvid.py\
+	rm predictions/${xixi}_iter_${n}/ -r -f
+	python test_segmentation_camvid.py\
 		 --model segnet_basic_inference.prototxt\
-		 --weights snapshots/${xixi}_iter_${n}.caffemodel\
+		--weights inference/test_weights.caffemodel\
 		 --iter 233\
 		 --output predictions/${xixi}_iter_${n}/
 	matlab -nosplash -nodisplay -r "gtPath = 'predictions/${xixi}_iter_${n}/*_gt.png'; predPath = 'predictions/${xixi}_iter_${n}/*_pr.png'; run('compute_test_results'); exit"

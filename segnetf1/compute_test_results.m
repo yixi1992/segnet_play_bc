@@ -1,8 +1,8 @@
 % if you use another test/train set change number of classes and the
 % unlabeled index as well as number of iterations (needs to be equal to the test set size)
 
-gtPath = 'predictions/lr1e-6_iter_100/*_gt.png'; % path to your ground truth images
-predPath = 'predictions/lr1e-6_iter_100/*_pr.png'; %path to your predictions (you get them after you implement saving images in the test_segmentation_camvid.py script - or you write your own)
+%gtPath = 'predictions/ftrgbgglr1e-4fixed_iter_100/*_gt.png'; % path to your ground truth images
+%predPath = 'predictions/ftrgbgglr1e-4fixed_iter_100/*_pr.png'; %path to your predictions (you get them after you implement saving images in the test_segmentation_camvid.py script - or you write your own)
 groundTruths = dir(gtPath);
 skip = 0; % first two are '.' and '..' so skip them
 predictions = dir(predPath);
@@ -73,3 +73,11 @@ for i = 1:numClasses
 end
 
 display([' Global acc = ' num2str(globalacc) ' Class average acc = ' num2str(sum(diag(conf))/(numClasses)) ' Mean Int over Union = ' num2str(sum(intoverunion)/(numClasses))]);
+
+display(['gtPath=',gtPath])
+fid = fopen([gtPath,'/result'], 'wt');
+fprintf(fid, [' Global acc = ' num2str(globalacc) ' Class average acc = ' num2str(sum(diag(conf))/(numClasses)) ' Mean Int over Union = ' num2str(sum(intoverunion)/(numClasses))]);
+fclose(fid);
+
+
+

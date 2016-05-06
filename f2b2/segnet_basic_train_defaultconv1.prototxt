@@ -12,7 +12,7 @@ layer {
 	mean_value: 0
   }
   data_param {
-    source: "camvidtrainvalfmp480360f1np_lmdb/trainval-lmdb"
+    source: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidtrainvalfmp480360f1b1f2b2np_lmdb/train-lmdb"
     batch_size: 4
     backend: LMDB
   }
@@ -24,12 +24,14 @@ layer {
   include {
     phase: TRAIN
   }
-  transform_param {
-   	mean_value: 0
-	mean_value: 0
-  }
+ # transform_param {
+ #  	mean_value: 0
+#	mean_value: 0
+#	mean_value: 0
+#	mean_value: 0
+#  }
   data_param {
-    source: "camvidtrainvalfmp480360f1np_lmdb/trainval-flow-lmdb"
+    source: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidtrainvalfmp480360f1b1f2b2np_lmdb/train-flow-lmdb"
     batch_size: 4
     backend: LMDB
   }
@@ -42,7 +44,7 @@ layer {
     phase: TRAIN
   }
   data_param {
-    source: "camvidtrainvalfmp480360f1np_lmdb/trainval-label-lmdb"
+    source: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidtrainvalfmp480360f1b1f2b2np_lmdb/train-label-lmdb"
     batch_size: 4
     backend: LMDB
   }
@@ -60,7 +62,7 @@ layer {
 	mean_value: 0
   }
   data_param {
-    source: "camvidtrainvalfmp480360f1np_lmdb/test-lmdb"
+    source: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidtrainvalfmp480360f1b1f2b2np_lmdb/val-lmdb"
     batch_size: 4
     backend: LMDB
   }
@@ -72,12 +74,14 @@ layer {
   include {
     phase: TEST
   }
-  transform_param {
-   	mean_value: 0
-	mean_value: 0
-  }
+ # transform_param {
+ #  	mean_value: 0
+#	mean_value: 0
+#	mean_value: 0
+#	mean_value: 0
+ # }
   data_param {
-    source: "camvidtrainvalfmp480360f1np_lmdb/test-flow-lmdb"
+    source: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidtrainvalfmp480360f1b1f2b2np_lmdb/val-flow-lmdb"
     batch_size: 4
     backend: LMDB
   }
@@ -90,7 +94,7 @@ layer {
     phase: TEST
   }
   data_param {
-    source: "camvidtrainvalfmp480360f1np_lmdb/test-label-lmdb"
+    source: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidtrainvalfmp480360f1b1f2b2np_lmdb/val-label-lmdb"
     batch_size: 4
     backend: LMDB
   }
@@ -106,6 +110,7 @@ layer {
     beta: 0.75
   }
 }
+
 layer {
   name: "normflow"
   type: "LRN"
@@ -126,7 +131,7 @@ layer {
 	concat_param { axis: 1 } 
 }
 layer {
-  name: "conv1_flow"
+  name: "conv1_f1b1f2b2"
   type: "Convolution"
   bottom: "norm"
   top: "conv1"
@@ -142,13 +147,7 @@ layer {
     num_output: 64
     kernel_size: 7
     pad: 3
-    weight_filler {
-      type: "msra"
-    }
-    bias_filler {
-      type: "constant"
-    }
-  }
+ }
 }
 layer {
   bottom: "conv1"

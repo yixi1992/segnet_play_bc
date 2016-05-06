@@ -8,7 +8,7 @@ gamma: 1.0
 stepsize: 10000000
 display: 20
 momentum: 0.9
-max_iter: 20000
+max_iter: 15000
 weight_decay: 0.0005
 snapshot: 100
 snapshot_prefix: "snapshots/bs10lr0.1"  	# Change this to the absolute path to where you wish to output solver snapshots

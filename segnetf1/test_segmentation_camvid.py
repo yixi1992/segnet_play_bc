@@ -31,59 +31,73 @@ net = caffe.Net(args.model,
                 args.weights,
                 caffe.TEST)
 
-
+idx=0
 acc=[]
-for i in range(0, args.iter):
+softmaxlosses = np.array([])
+accuracys = np.array([])
+batch_size = net.blobs['data'].num
+print 'batch_size=' + str(batch_size)
+for i in range(0, int(np.ceil(args.iter/float(batch_size)))):
 		
 	net.forward()
 	#print i
 	#for ii in range(0, len(net.params['conv1_flow'])):
 	#	print ii, np.sum(net.params['conv1_flow'][ii].data**2)
 	
-	image = net.blobs['data'].data
-	label = net.blobs['label'].data
-	predicted = net.blobs['prob'].data
-	image = np.squeeze(image[0,:,:,:])
-	label = np.array(np.squeeze(label[0,:,:,:]), dtype=np.uint8)
-	output = np.squeeze(predicted[0,:,:,:])
-	ind = np.argmax(output, axis=0)
-	ind = np.array(ind, dtype=np.uint8)
+	image0 = net.blobs['data'].data
+	label0 = net.blobs['label'].data
+	predicted0 = net.blobs['prob'].data
+	for j in range(net.blobs['data'].num): 
+		image = np.squeeze(image0[j,:,:,:])
+		label = np.array(np.squeeze(label0[j,:,:,:]), dtype=np.uint8)
+		output = np.squeeze(predicted0[j,:,:,:])
+		ind = np.argmax(output, axis=0)
+		ind = np.array(ind, dtype=np.uint8)
 
-	o = findsource(label, ind)
-	if o==-1:
-		print 'err cannot find original file for data ',i
-		exit(1)
+		#ind = np.array(np.squeeze(net.blobs['argmax'].data), dtype=np.uint8)	
 
-	def findsource(image, label):
-		input_source='/scratch/groups/lsdavis/yixi/segnet/CamVid/test.txt'
-		for line in open(input_source,'r'):
-			files = line.rstrip('\n').split(' ')
-			im_file = files[0]
-			annot_file = files[1]
-
-			gt_l = np.array(Image.open(annot_file))
-
-			im = np.array(Image.open(im_file))
-			im = im[:,:,::-1]
-			im = im.transpose((2,0,1))
-			
-			image_dis = np.sum((image[:3,:,:]-im)**2)
-			label_dis = np.sum((label-gt_l)**2)
-			print 'data',i,'file',im_file, 'image_dis=',image_dis, 'label_dis=',label_dis	
-			if image_dis<1e-6 && label_dis<1e-6:
-				return im_file
-		return -1	
-
-
-
-
-	IMAGE_FILE = os.path.join(outputs, str(i))
-
-	scipy.misc.imsave(IMAGE_FILE+'_pr.png', ind)
-	scipy.misc.imsave(IMAGE_FILE+'_gt.png', label)
+		softmaxloss = np.array(np.squeeze(net.blobs['loss'].data))
+		softmaxlosses = np.append(softmaxlosses, softmaxloss)
+		print 'softmaxloss=',softmaxloss,' mean=', np.mean(softmaxlosses)
 	
-	print ind.shape
-	print label.shape
+		accuracy = np.array(np.squeeze(net.blobs['accuracy'].data))
+		accuracys = np.append(accuracys, accuracy)
+		print 'accuracy=', accuracy, 'mean=', np.mean(accuracys)
+		def findsource(image, label):
+			input_source='/scratch/groups/lsdavis/yixi/segnet/CamVid/test.txt'
+			for line in open(input_source,'r'):
+				files = line.rstrip('\n').split(' ')
+				im_file = files[0]
+				annot_file = files[1]
+
+				gt_l = np.array(Image.open(annot_file))
+
+				im = np.array(Image.open(im_file))
+				im = im[:,:,::-1]
+				im = im.transpose((2,0,1))
+				
+				image_dis = np.sum((image[:3,:,:]-im)**2)
+				label_dis = np.sum((label-gt_l)**2)
+				print 'data',i,'file',im_file, 'image_dis=',image_dis, 'label_dis=',label_dis	
+				if image_dis<1e-6 and label_dis<1e-6:
+					return im_file
+			return -1	
+
+
+
+		#o = findsource(image, label)
+		#if o==-1:
+	#		print 'err cannot find original file for data ',i
+	#		exit(1)
+	#	else:
+	#		print 'success matched data ', i, 'with', o
+		IMAGE_FILE = os.path.join(outputs, str(idx))
+		idx = idx+1		
+		scipy.misc.imsave(IMAGE_FILE+'_pr.png', ind)
+		scipy.misc.imsave(IMAGE_FILE+'_gt.png', label)
+		if idx>=args.iter:
+			exit(0)	
+	
 	if False:	
 		label_flat = label
 		print np.sum(np.equal(ind,label_flat))
