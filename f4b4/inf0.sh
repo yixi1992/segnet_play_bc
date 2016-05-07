@@ -6,14 +6,14 @@
 #SBATCH --mail-user=yixi@cs.umd.edu
 ##SBATCH --mail-type=BEGIN
 #SBATCH --mail-type=END
-#SBATCH --job-name="f1inference"
+#SBATCH --job-name="f4b4inference"
 #SBATCH --gres=gpu:1
 #SBATCH --partition=gpu
 #SBATCH --mem=5000
 
-xixi='f1b1f2b2trgbslicelr1e-3fixed'
+xixi='f1b1f2b2f4b4trgbr1e-3fixed'
 bs=false
-slice=true
+slice=false
 fromrgb=true
 iter_s=0
 iter_e=0
