@@ -169,7 +169,6 @@ layer {
     beta: 0.75
   }
 }
-l
 layer {
 	name: "concat" 
 	bottom: "normdata" 
