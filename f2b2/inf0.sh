@@ -11,18 +11,17 @@
 #SBATCH --partition=gpu
 #SBATCH --mem=5000
 
-xixi='f1b1trgbbs10lr1e-3fixed'
-bs=true
+xixi='f1b1f2b2trgblr1e-1fixed'
+bs=false
 slice=false
 fromrgb=true
-iter_s=7000
-iter_e=8000
+iter_s=11000
+iter_e=12000
 iter_gap=1000
 
-cur_dir='/home-4/yixi@umd.edu/segnet/f1b1/'
+cur_dir=$PWD
 work_dir='/scratch/groups/lsdavis/yixi/segnet/segnetf1/'
 
-cd ${work_dir}
 
 
 module load matlab
@@ -61,7 +60,7 @@ do
 
 	rm -r ${cur_dir}/inference/${xixi}_iter_${n}
 	mkdir ${cur_dir}/inference/${xixi}_iter_${n}
-	python ${cur_dir}/../compute_bn_statistics_lmdb.py \
+	python /home-4/yixi@umd.edu/segnet/compute_bn_statistics_lmdb.py \
 		${trainprototxt} \
 		${caffemodel} \
 		${cur_dir}/inference/${xixi}_iter_${n}/
