@@ -11,12 +11,12 @@
 #SBATCH --partition=gpu
 #SBATCH --mem=5000
 
-xixi='f1b1f2b2f4b4trgbslr1e-3fixed'
+xixi='f1b1f2b2f4b4trgbslr1e-2fixed'
 bs=false
 slice=false
 fromrgb=true
-iter_s=0
-iter_e=16000
+iter_s=29000
+iter_e=30000
 iter_gap=1000
 
 cur_dir=$PWD
