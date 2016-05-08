@@ -12,11 +12,11 @@
 #SBATCH --mem=5000
 
 xixi='f1b1f2b2trgbslicelr1e-3fixed'
-bs=false
+bs_bn=true
 slice=true
 fromrgb=true
 iter_s=0
-iter_e=0
+iter_e=1000
 iter_gap=1000
 
 cur_dir=$PWD
@@ -38,13 +38,18 @@ do
 	fi
 	
 	trainprototxt=${cur_dir}/segnet_basic_train.prototxt
-	if [ "$bs" = true ];
+	if [ "$bs_bn" = true ];
 	then
 		trainprototxt=${cur_dir}/segnet_basic_train_batchsize.prototxt
-	fi
-	if [ "$slice" = true ];
-	then
-		trainprototxt=${cur_dir}/segnet_basic_train_slice.prototxt
+		if [ "$slice" = true ];
+		then
+			trainprototxt=${cur_dir}/segnet_basic_train_slice_batchsize.prototxt
+		fi
+	else
+		if [ "$slice" = true ];
+		then
+			trainprototxt=${cur_dir}/segnet_basic_train_slice.prototxt
+		fi
 	fi
 	
 	inferenceprototxt=${cur_dir}/segnet_basic_inference.prototxt
@@ -52,7 +57,7 @@ do
 	then
 		inferenceprototxt=${cur_dir}/segnet_basic_inference_slice.prototxt
 	fi
-	echo $bs
+	echo $bs_bn
 	echo $slice
 	echo $caffemodel
 	echo $trainprototxt
