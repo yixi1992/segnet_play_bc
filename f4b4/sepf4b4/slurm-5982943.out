@@ -1,0 +1,1778 @@
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I0508 16:16:07.501601 123910 net.cpp:42] Initializing net from parameters: 
+name: "segnet"
+state {
+  phase: TEST
+}
+layer {
+  name: "data"
+  type: "DenseImageData"
+  top: "data"
+  top: "label"
+  dense_image_data_param {
+    source: "/scratch/groups/lsdavis/yixi/segnet/CamVid/train.txt"
+    batch_size: 10
+    shuffle: true
+  }
+}
+layer {
+  name: "norm"
+  type: "LRN"
+  bottom: "data"
+  top: "norm"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "norm"
+  top: "conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv1_bn"
+  type: "BN"
+  bottom: "conv1"
+  top: "conv1"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "conv1"
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1"
+  top: "pool1"
+  top: "pool1_mask"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv2"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv2_bn"
+  type: "BN"
+  bottom: "conv2"
+  top: "conv2"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+  }
+}
+layer {
+  name: "relu2"
+  type: "ReLU"
+  bottom: "conv2"
+  top: "conv2"
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2"
+  top: "pool2"
+  top: "pool2_mask"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv3"
+  type: "Convolution"
+  bottom: "pool2"
+  top: "conv3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv3_bn"
+  type: "BN"
+  bottom: "conv3"
+  top: "conv3"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+  }
+}
+layer {
+  name: "relu3"
+  type: "ReLU"
+  bottom: "conv3"
+  top: "conv3"
+}
+layer {
+  name: "pool3"
+  type: "Pooling"
+  bottom: "conv3"
+  top: "pool3"
+  top: "pool3_mask"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv4"
+  type: "Convolution"
+  bottom: "pool3"
+  top: "conv4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv4_bn"
+  type: "BN"
+  bottom: "conv4"
+  top: "conv4"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+  }
+}
+layer {
+  name: "relu4"
+  type: "ReLU"
+  bottom: "conv4"
+  top: "conv4"
+}
+layer {
+  name: "pool4"
+  type: "Pooling"
+  bottom: "conv4"
+  top: "pool4"
+  top: "pool4_mask"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "upsample4"
+  type: "Upsample"
+  bottom: "pool4"
+  bottom: "pool4_mask"
+  top: "upsample4"
+  upsample_param {
+    scale: 2
+    pad_out_h: true
+  }
+}
+layer {
+  name: "conv_decode4"
+  type: "Convolution"
+  bottom: "upsample4"
+  top: "conv_decode4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv_decode4_bn"
+  type: "BN"
+  bottom: "conv_decode4"
+  top: "conv_decode4"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+  }
+}
+layer {
+  name: "upsample3"
+  type: "Upsample"
+  bottom: "conv_decode4"
+  bottom: "pool3_mask"
+  top: "upsample3"
+  upsample_param {
+    scale: 2
+  }
+}
+layer {
+  name: "conv_decode3"
+  type: "Convolution"
+  bottom: "upsample3"
+  top: "conv_decode3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv_decode3_bn"
+  type: "BN"
+  bottom: "conv_decode3"
+  top: "conv_decode3"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+  }
+}
+layer {
+  name: "upsample2"
+  type: "Upsample"
+  bottom: "conv_decode3"
+  bottom: "pool2_mask"
+  top: "upsample2"
+  upsample_param {
+    scale: 2
+  }
+}
+layer {
+  name: "conv_decode2"
+  type: "Convolution"
+  bottom: "upsample2"
+  top: "conv_decode2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv_decode2_bn"
+  type: "BN"
+  bottom: "conv_decode2"
+  top: "conv_decode2"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+  }
+}
+layer {
+  name: "upsample1"
+  type: "Upsample"
+  bottom: "conv_decode2"
+  bottom: "pool1_mask"
+  top: "upsample1"
+  upsample_param {
+    scale: 2
+  }
+}
+layer {
+  name: "conv_decode1"
+  type: "Convolution"
+  bottom: "upsample1"
+  top: "conv_decode1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv_decode1_bn"
+  type: "BN"
+  bottom: "conv_decode1"
+  top: "conv_decode1"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+  }
+}
+layer {
+  name: "dense_softmax_inner_prod"
+  type: "Convolution"
+  bottom: "conv_decode1"
+  top: "conv_classifier"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 11
+    kernel_size: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "conv_classifier"
+  bottom: "label"
+  top: "loss"
+  loss_param {
+    ignore_label: 11
+    weight_by_label_freqs: true
+    class_weighting: 0.2595
+    class_weighting: 0.1826
+    class_weighting: 4.564
+    class_weighting: 0.1417
+    class_weighting: 0.9051
+    class_weighting: 0.3826
+    class_weighting: 9.6446
+    class_weighting: 1.8418
+    class_weighting: 0.6823
+    class_weighting: 6.2478
+    class_weighting: 7.3614
+  }
+  softmax_param {
+    engine: CAFFE
+  }
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "conv_classifier"
+  bottom: "label"
+  top: "accuracy"
+  top: "per_class_accuracy"
+}
+I0508 16:16:07.502075 123910 layer_factory.hpp:74] Creating layer data
+I0508 16:16:07.502156 123910 net.cpp:90] Creating Layer data
+I0508 16:16:07.502193 123910 net.cpp:368] data -> data
+I0508 16:16:07.502248 123910 net.cpp:368] data -> label
+I0508 16:16:07.502275 123910 net.cpp:120] Setting up data
+I0508 16:16:07.502315 123910 dense_image_data_layer.cpp:36] Opening file /scratch/groups/lsdavis/yixi/segnet/CamVid/train.txt
+I0508 16:16:07.504744 123910 dense_image_data_layer.cpp:46] Shuffling data
+I0508 16:16:08.015933 123910 dense_image_data_layer.cpp:51] A total of 367 examples.
+I0508 16:16:08.129453 123910 dense_image_data_layer.cpp:97] output data size: 10,3,360,480
+I0508 16:16:08.165539 123910 net.cpp:127] Top shape: 10 3 360 480 (5184000)
+I0508 16:16:08.165596 123910 net.cpp:127] Top shape: 10 1 360 480 (1728000)
+I0508 16:16:08.165621 123910 layer_factory.hpp:74] Creating layer label_data_1_split
+I0508 16:16:08.165657 123910 net.cpp:90] Creating Layer label_data_1_split
+I0508 16:16:08.165678 123910 net.cpp:410] label_data_1_split <- label
+I0508 16:16:08.165701 123910 net.cpp:368] label_data_1_split -> label_data_1_split_0
+I0508 16:16:08.165730 123910 net.cpp:368] label_data_1_split -> label_data_1_split_1
+I0508 16:16:08.165752 123910 net.cpp:120] Setting up label_data_1_split
+I0508 16:16:08.165782 123910 net.cpp:127] Top shape: 10 1 360 480 (1728000)
+I0508 16:16:08.165802 123910 net.cpp:127] Top shape: 10 1 360 480 (1728000)
+I0508 16:16:08.165817 123910 layer_factory.hpp:74] Creating layer norm
+I0508 16:16:08.165870 123910 net.cpp:90] Creating Layer norm
+I0508 16:16:08.165899 123910 net.cpp:410] norm <- data
+I0508 16:16:08.165920 123910 net.cpp:368] norm -> norm
+I0508 16:16:08.165941 123910 net.cpp:120] Setting up norm
+I0508 16:16:08.165969 123910 net.cpp:127] Top shape: 10 3 360 480 (5184000)
+I0508 16:16:08.165987 123910 layer_factory.hpp:74] Creating layer conv1
+I0508 16:16:08.166016 123910 net.cpp:90] Creating Layer conv1
+I0508 16:16:08.166034 123910 net.cpp:410] conv1 <- norm
+I0508 16:16:08.166054 123910 net.cpp:368] conv1 -> conv1
+I0508 16:16:08.166077 123910 net.cpp:120] Setting up conv1
+I0508 16:16:08.400868 123910 net.cpp:127] Top shape: 10 64 360 480 (110592000)
+I0508 16:16:08.400969 123910 layer_factory.hpp:74] Creating layer conv1_bn
+I0508 16:16:08.401017 123910 net.cpp:90] Creating Layer conv1_bn
+I0508 16:16:08.401041 123910 net.cpp:410] conv1_bn <- conv1
+I0508 16:16:08.401063 123910 net.cpp:357] conv1_bn -> conv1 (in-place)
+I0508 16:16:08.401090 123910 net.cpp:120] Setting up conv1_bn
+I0508 16:16:08.402235 123910 net.cpp:127] Top shape: 10 64 360 480 (110592000)
+I0508 16:16:08.402276 123910 layer_factory.hpp:74] Creating layer relu1
+I0508 16:16:08.402307 123910 net.cpp:90] Creating Layer relu1
+I0508 16:16:08.402325 123910 net.cpp:410] relu1 <- conv1
+I0508 16:16:08.402343 123910 net.cpp:357] relu1 -> conv1 (in-place)
+I0508 16:16:08.402361 123910 net.cpp:120] Setting up relu1
+I0508 16:16:08.402675 123910 net.cpp:127] Top shape: 10 64 360 480 (110592000)
+I0508 16:16:08.402711 123910 layer_factory.hpp:74] Creating layer pool1
+I0508 16:16:08.402730 123910 layer_factory.cpp:55] CUDNN does not support padding or multiple tops. Using Caffe's own pooling layer.
+I0508 16:16:08.402750 123910 net.cpp:90] Creating Layer pool1
+I0508 16:16:08.402765 123910 net.cpp:410] pool1 <- conv1
+I0508 16:16:08.402788 123910 net.cpp:368] pool1 -> pool1
+I0508 16:16:08.402812 123910 net.cpp:368] pool1 -> pool1_mask
+I0508 16:16:08.402833 123910 net.cpp:120] Setting up pool1
+I0508 16:16:08.402874 123910 net.cpp:127] Top shape: 10 64 180 240 (27648000)
+I0508 16:16:08.402897 123910 net.cpp:127] Top shape: 10 64 180 240 (27648000)
+I0508 16:16:08.402912 123910 layer_factory.hpp:74] Creating layer conv2
+I0508 16:16:08.402941 123910 net.cpp:90] Creating Layer conv2
+I0508 16:16:08.402958 123910 net.cpp:410] conv2 <- pool1
+I0508 16:16:08.402977 123910 net.cpp:368] conv2 -> conv2
+I0508 16:16:08.403002 123910 net.cpp:120] Setting up conv2
+I0508 16:16:08.416492 123910 net.cpp:127] Top shape: 10 64 180 240 (27648000)
+I0508 16:16:08.416554 123910 layer_factory.hpp:74] Creating layer conv2_bn
+I0508 16:16:08.416585 123910 net.cpp:90] Creating Layer conv2_bn
+I0508 16:16:08.416604 123910 net.cpp:410] conv2_bn <- conv2
+I0508 16:16:08.416627 123910 net.cpp:357] conv2_bn -> conv2 (in-place)
+I0508 16:16:08.416651 123910 net.cpp:120] Setting up conv2_bn
+I0508 16:16:08.416928 123910 net.cpp:127] Top shape: 10 64 180 240 (27648000)
+I0508 16:16:08.416991 123910 layer_factory.hpp:74] Creating layer relu2
+I0508 16:16:08.417017 123910 net.cpp:90] Creating Layer relu2
+I0508 16:16:08.417039 123910 net.cpp:410] relu2 <- conv2
+I0508 16:16:08.417057 123910 net.cpp:357] relu2 -> conv2 (in-place)
+I0508 16:16:08.417076 123910 net.cpp:120] Setting up relu2
+I0508 16:16:08.417570 123910 net.cpp:127] Top shape: 10 64 180 240 (27648000)
+I0508 16:16:08.417615 123910 layer_factory.hpp:74] Creating layer pool2
+I0508 16:16:08.417634 123910 layer_factory.cpp:55] CUDNN does not support padding or multiple tops. Using Caffe's own pooling layer.
+I0508 16:16:08.417657 123910 net.cpp:90] Creating Layer pool2
+I0508 16:16:08.417675 123910 net.cpp:410] pool2 <- conv2
+I0508 16:16:08.417695 123910 net.cpp:368] pool2 -> pool2
+I0508 16:16:08.417716 123910 net.cpp:368] pool2 -> pool2_mask
+I0508 16:16:08.417737 123910 net.cpp:120] Setting up pool2
+I0508 16:16:08.417760 123910 net.cpp:127] Top shape: 10 64 90 120 (6912000)
+I0508 16:16:08.417778 123910 net.cpp:127] Top shape: 10 64 90 120 (6912000)
+I0508 16:16:08.417793 123910 layer_factory.hpp:74] Creating layer conv3
+I0508 16:16:08.417829 123910 net.cpp:90] Creating Layer conv3
+I0508 16:16:08.417857 123910 net.cpp:410] conv3 <- pool2
+I0508 16:16:08.417884 123910 net.cpp:368] conv3 -> conv3
+I0508 16:16:08.417907 123910 net.cpp:120] Setting up conv3
+I0508 16:16:08.425300 123910 net.cpp:127] Top shape: 10 64 90 120 (6912000)
+I0508 16:16:08.425362 123910 layer_factory.hpp:74] Creating layer conv3_bn
+I0508 16:16:08.425393 123910 net.cpp:90] Creating Layer conv3_bn
+I0508 16:16:08.425412 123910 net.cpp:410] conv3_bn <- conv3
+I0508 16:16:08.425431 123910 net.cpp:357] conv3_bn -> conv3 (in-place)
+I0508 16:16:08.425453 123910 net.cpp:120] Setting up conv3_bn
+I0508 16:16:08.425568 123910 net.cpp:127] Top shape: 10 64 90 120 (6912000)
+I0508 16:16:08.425597 123910 layer_factory.hpp:74] Creating layer relu3
+I0508 16:16:08.425622 123910 net.cpp:90] Creating Layer relu3
+I0508 16:16:08.425639 123910 net.cpp:410] relu3 <- conv3
+I0508 16:16:08.425657 123910 net.cpp:357] relu3 -> conv3 (in-place)
+I0508 16:16:08.425675 123910 net.cpp:120] Setting up relu3
+I0508 16:16:08.426182 123910 net.cpp:127] Top shape: 10 64 90 120 (6912000)
+I0508 16:16:08.426226 123910 layer_factory.hpp:74] Creating layer pool3
+I0508 16:16:08.426246 123910 layer_factory.cpp:55] CUDNN does not support padding or multiple tops. Using Caffe's own pooling layer.
+I0508 16:16:08.426271 123910 net.cpp:90] Creating Layer pool3
+I0508 16:16:08.426290 123910 net.cpp:410] pool3 <- conv3
+I0508 16:16:08.426313 123910 net.cpp:368] pool3 -> pool3
+I0508 16:16:08.426337 123910 net.cpp:368] pool3 -> pool3_mask
+I0508 16:16:08.426358 123910 net.cpp:120] Setting up pool3
+I0508 16:16:08.426381 123910 net.cpp:127] Top shape: 10 64 45 60 (1728000)
+I0508 16:16:08.426399 123910 net.cpp:127] Top shape: 10 64 45 60 (1728000)
+I0508 16:16:08.426414 123910 layer_factory.hpp:74] Creating layer conv4
+I0508 16:16:08.426437 123910 net.cpp:90] Creating Layer conv4
+I0508 16:16:08.426453 123910 net.cpp:410] conv4 <- pool3
+I0508 16:16:08.426476 123910 net.cpp:368] conv4 -> conv4
+I0508 16:16:08.426498 123910 net.cpp:120] Setting up conv4
+I0508 16:16:08.433585 123910 net.cpp:127] Top shape: 10 64 45 60 (1728000)
+I0508 16:16:08.433640 123910 layer_factory.hpp:74] Creating layer conv4_bn
+I0508 16:16:08.433672 123910 net.cpp:90] Creating Layer conv4_bn
+I0508 16:16:08.433692 123910 net.cpp:410] conv4_bn <- conv4
+I0508 16:16:08.433712 123910 net.cpp:357] conv4_bn -> conv4 (in-place)
+I0508 16:16:08.433734 123910 net.cpp:120] Setting up conv4_bn
+I0508 16:16:08.433792 123910 net.cpp:127] Top shape: 10 64 45 60 (1728000)
+I0508 16:16:08.433816 123910 layer_factory.hpp:74] Creating layer relu4
+I0508 16:16:08.433836 123910 net.cpp:90] Creating Layer relu4
+I0508 16:16:08.433863 123910 net.cpp:410] relu4 <- conv4
+I0508 16:16:08.433882 123910 net.cpp:357] relu4 -> conv4 (in-place)
+I0508 16:16:08.433902 123910 net.cpp:120] Setting up relu4
+I0508 16:16:08.434188 123910 net.cpp:127] Top shape: 10 64 45 60 (1728000)
+I0508 16:16:08.434223 123910 layer_factory.hpp:74] Creating layer pool4
+I0508 16:16:08.434265 123910 layer_factory.cpp:55] CUDNN does not support padding or multiple tops. Using Caffe's own pooling layer.
+I0508 16:16:08.434293 123910 net.cpp:90] Creating Layer pool4
+I0508 16:16:08.434310 123910 net.cpp:410] pool4 <- conv4
+I0508 16:16:08.434329 123910 net.cpp:368] pool4 -> pool4
+I0508 16:16:08.434355 123910 net.cpp:368] pool4 -> pool4_mask
+I0508 16:16:08.434379 123910 net.cpp:120] Setting up pool4
+I0508 16:16:08.434403 123910 net.cpp:127] Top shape: 10 64 23 30 (441600)
+I0508 16:16:08.434422 123910 net.cpp:127] Top shape: 10 64 23 30 (441600)
+I0508 16:16:08.434437 123910 layer_factory.hpp:74] Creating layer upsample4
+I0508 16:16:08.434463 123910 net.cpp:90] Creating Layer upsample4
+I0508 16:16:08.434480 123910 net.cpp:410] upsample4 <- pool4
+I0508 16:16:08.434497 123910 net.cpp:410] upsample4 <- pool4_mask
+I0508 16:16:08.434515 123910 net.cpp:368] upsample4 -> upsample4
+I0508 16:16:08.434535 123910 net.cpp:120] Setting up upsample4
+I0508 16:16:08.434553 123910 upsample_layer.cpp:31] Params 'pad_out_{}_' are deprecated. Please declare upsample height and width useing the upsample_h, upsample_w parameters.
+I0508 16:16:08.434576 123910 net.cpp:127] Top shape: 10 64 45 60 (1728000)
+I0508 16:16:08.434592 123910 layer_factory.hpp:74] Creating layer conv_decode4
+I0508 16:16:08.434618 123910 net.cpp:90] Creating Layer conv_decode4
+I0508 16:16:08.434635 123910 net.cpp:410] conv_decode4 <- upsample4
+I0508 16:16:08.434659 123910 net.cpp:368] conv_decode4 -> conv_decode4
+I0508 16:16:08.434680 123910 net.cpp:120] Setting up conv_decode4
+I0508 16:16:08.441748 123910 net.cpp:127] Top shape: 10 64 45 60 (1728000)
+I0508 16:16:08.441810 123910 layer_factory.hpp:74] Creating layer conv_decode4_bn
+I0508 16:16:08.441838 123910 net.cpp:90] Creating Layer conv_decode4_bn
+I0508 16:16:08.441866 123910 net.cpp:410] conv_decode4_bn <- conv_decode4
+I0508 16:16:08.441887 123910 net.cpp:357] conv_decode4_bn -> conv_decode4 (in-place)
+I0508 16:16:08.441910 123910 net.cpp:120] Setting up conv_decode4_bn
+I0508 16:16:08.441970 123910 net.cpp:127] Top shape: 10 64 45 60 (1728000)
+I0508 16:16:08.441995 123910 layer_factory.hpp:74] Creating layer upsample3
+I0508 16:16:08.442019 123910 net.cpp:90] Creating Layer upsample3
+I0508 16:16:08.442036 123910 net.cpp:410] upsample3 <- conv_decode4
+I0508 16:16:08.442054 123910 net.cpp:410] upsample3 <- pool3_mask
+I0508 16:16:08.442072 123910 net.cpp:368] upsample3 -> upsample3
+I0508 16:16:08.442092 123910 net.cpp:120] Setting up upsample3
+I0508 16:16:08.442108 123910 upsample_layer.cpp:31] Params 'pad_out_{}_' are deprecated. Please declare upsample height and width useing the upsample_h, upsample_w parameters.
+I0508 16:16:08.442128 123910 net.cpp:127] Top shape: 10 64 90 120 (6912000)
+I0508 16:16:08.442143 123910 layer_factory.hpp:74] Creating layer conv_decode3
+I0508 16:16:08.442165 123910 net.cpp:90] Creating Layer conv_decode3
+I0508 16:16:08.442181 123910 net.cpp:410] conv_decode3 <- upsample3
+I0508 16:16:08.442200 123910 net.cpp:368] conv_decode3 -> conv_decode3
+I0508 16:16:08.442221 123910 net.cpp:120] Setting up conv_decode3
+I0508 16:16:08.449347 123910 net.cpp:127] Top shape: 10 64 90 120 (6912000)
+I0508 16:16:08.449400 123910 layer_factory.hpp:74] Creating layer conv_decode3_bn
+I0508 16:16:08.449426 123910 net.cpp:90] Creating Layer conv_decode3_bn
+I0508 16:16:08.449445 123910 net.cpp:410] conv_decode3_bn <- conv_decode3
+I0508 16:16:08.449467 123910 net.cpp:357] conv_decode3_bn -> conv_decode3 (in-place)
+I0508 16:16:08.449491 123910 net.cpp:120] Setting up conv_decode3_bn
+I0508 16:16:08.449604 123910 net.cpp:127] Top shape: 10 64 90 120 (6912000)
+I0508 16:16:08.449631 123910 layer_factory.hpp:74] Creating layer upsample2
+I0508 16:16:08.449652 123910 net.cpp:90] Creating Layer upsample2
+I0508 16:16:08.449668 123910 net.cpp:410] upsample2 <- conv_decode3
+I0508 16:16:08.449686 123910 net.cpp:410] upsample2 <- pool2_mask
+I0508 16:16:08.449707 123910 net.cpp:368] upsample2 -> upsample2
+I0508 16:16:08.449729 123910 net.cpp:120] Setting up upsample2
+I0508 16:16:08.449764 123910 upsample_layer.cpp:31] Params 'pad_out_{}_' are deprecated. Please declare upsample height and width useing the upsample_h, upsample_w parameters.
+I0508 16:16:08.449787 123910 net.cpp:127] Top shape: 10 64 180 240 (27648000)
+I0508 16:16:08.449803 123910 layer_factory.hpp:74] Creating layer conv_decode2
+I0508 16:16:08.449837 123910 net.cpp:90] Creating Layer conv_decode2
+I0508 16:16:08.449867 123910 net.cpp:410] conv_decode2 <- upsample2
+I0508 16:16:08.449887 123910 net.cpp:368] conv_decode2 -> conv_decode2
+I0508 16:16:08.449910 123910 net.cpp:120] Setting up conv_decode2
+I0508 16:16:08.457157 123910 net.cpp:127] Top shape: 10 64 180 240 (27648000)
+I0508 16:16:08.457212 123910 layer_factory.hpp:74] Creating layer conv_decode2_bn
+I0508 16:16:08.457242 123910 net.cpp:90] Creating Layer conv_decode2_bn
+I0508 16:16:08.457262 123910 net.cpp:410] conv_decode2_bn <- conv_decode2
+I0508 16:16:08.457280 123910 net.cpp:357] conv_decode2_bn -> conv_decode2 (in-place)
+I0508 16:16:08.457306 123910 net.cpp:120] Setting up conv_decode2_bn
+I0508 16:16:08.457675 123910 net.cpp:127] Top shape: 10 64 180 240 (27648000)
+I0508 16:16:08.457707 123910 layer_factory.hpp:74] Creating layer upsample1
+I0508 16:16:08.457732 123910 net.cpp:90] Creating Layer upsample1
+I0508 16:16:08.457749 123910 net.cpp:410] upsample1 <- conv_decode2
+I0508 16:16:08.457765 123910 net.cpp:410] upsample1 <- pool1_mask
+I0508 16:16:08.457783 123910 net.cpp:368] upsample1 -> upsample1
+I0508 16:16:08.457803 123910 net.cpp:120] Setting up upsample1
+I0508 16:16:08.457819 123910 upsample_layer.cpp:31] Params 'pad_out_{}_' are deprecated. Please declare upsample height and width useing the upsample_h, upsample_w parameters.
+I0508 16:16:08.457839 123910 net.cpp:127] Top shape: 10 64 360 480 (110592000)
+I0508 16:16:08.457864 123910 layer_factory.hpp:74] Creating layer conv_decode1
+I0508 16:16:08.457895 123910 net.cpp:90] Creating Layer conv_decode1
+I0508 16:16:08.457912 123910 net.cpp:410] conv_decode1 <- upsample1
+I0508 16:16:08.457932 123910 net.cpp:368] conv_decode1 -> conv_decode1
+I0508 16:16:08.457957 123910 net.cpp:120] Setting up conv_decode1
+I0508 16:16:08.478193 123910 net.cpp:127] Top shape: 10 64 360 480 (110592000)
+I0508 16:16:08.478253 123910 layer_factory.hpp:74] Creating layer conv_decode1_bn
+I0508 16:16:08.478286 123910 net.cpp:90] Creating Layer conv_decode1_bn
+I0508 16:16:08.478305 123910 net.cpp:410] conv_decode1_bn <- conv_decode1
+I0508 16:16:08.478325 123910 net.cpp:357] conv_decode1_bn -> conv_decode1 (in-place)
+I0508 16:16:08.478348 123910 net.cpp:120] Setting up conv_decode1_bn
+I0508 16:16:08.479710 123910 net.cpp:127] Top shape: 10 64 360 480 (110592000)
+I0508 16:16:08.479749 123910 layer_factory.hpp:74] Creating layer dense_softmax_inner_prod
+I0508 16:16:08.479785 123910 net.cpp:90] Creating Layer dense_softmax_inner_prod
+I0508 16:16:08.479804 123910 net.cpp:410] dense_softmax_inner_prod <- conv_decode1
+I0508 16:16:08.479827 123910 net.cpp:368] dense_softmax_inner_prod -> conv_classifier
+I0508 16:16:08.479856 123910 net.cpp:120] Setting up dense_softmax_inner_prod
+I0508 16:16:08.481685 123910 net.cpp:127] Top shape: 10 11 360 480 (19008000)
+I0508 16:16:08.481748 123910 layer_factory.hpp:74] Creating layer conv_classifier_dense_softmax_inner_prod_0_split
+I0508 16:16:08.481780 123910 net.cpp:90] Creating Layer conv_classifier_dense_softmax_inner_prod_0_split
+I0508 16:16:08.481797 123910 net.cpp:410] conv_classifier_dense_softmax_inner_prod_0_split <- conv_classifier
+I0508 16:16:08.481823 123910 net.cpp:368] conv_classifier_dense_softmax_inner_prod_0_split -> conv_classifier_dense_softmax_inner_prod_0_split_0
+I0508 16:16:08.481856 123910 net.cpp:368] conv_classifier_dense_softmax_inner_prod_0_split -> conv_classifier_dense_softmax_inner_prod_0_split_1
+I0508 16:16:08.481883 123910 net.cpp:120] Setting up conv_classifier_dense_softmax_inner_prod_0_split
+I0508 16:16:08.481905 123910 net.cpp:127] Top shape: 10 11 360 480 (19008000)
+I0508 16:16:08.481922 123910 net.cpp:127] Top shape: 10 11 360 480 (19008000)
+I0508 16:16:08.481937 123910 layer_factory.hpp:74] Creating layer loss
+I0508 16:16:08.481991 123910 net.cpp:90] Creating Layer loss
+I0508 16:16:08.482014 123910 net.cpp:410] loss <- conv_classifier_dense_softmax_inner_prod_0_split_0
+I0508 16:16:08.482031 123910 net.cpp:410] loss <- label_data_1_split_0
+I0508 16:16:08.482050 123910 net.cpp:368] loss -> loss
+I0508 16:16:08.482075 123910 net.cpp:120] Setting up loss
+I0508 16:16:08.482101 123910 layer_factory.hpp:74] Creating layer loss
+I0508 16:16:08.581919 123910 net.cpp:127] Top shape: (1)
+I0508 16:16:08.582033 123910 net.cpp:129]     with loss weight 1
+I0508 16:16:08.582082 123910 layer_factory.hpp:74] Creating layer accuracy
+I0508 16:16:08.582116 123910 net.cpp:90] Creating Layer accuracy
+I0508 16:16:08.582137 123910 net.cpp:410] accuracy <- conv_classifier_dense_softmax_inner_prod_0_split_1
+I0508 16:16:08.582164 123910 net.cpp:410] accuracy <- label_data_1_split_1
+I0508 16:16:08.582182 123910 net.cpp:368] accuracy -> accuracy
+I0508 16:16:08.582206 123910 net.cpp:368] accuracy -> per_class_accuracy
+I0508 16:16:08.582227 123910 net.cpp:120] Setting up accuracy
+I0508 16:16:08.582247 123910 accuracy_layer.cpp:24] Per-class accuracies currently only work on TRAIN phase only.
+I0508 16:16:08.582270 123910 net.cpp:127] Top shape: (1)
+I0508 16:16:08.582289 123910 net.cpp:127] Top shape: 11 1 1 1 (11)
+I0508 16:16:08.582304 123910 net.cpp:194] accuracy does not need backward computation.
+I0508 16:16:08.582321 123910 net.cpp:192] loss needs backward computation.
+I0508 16:16:08.582337 123910 net.cpp:192] conv_classifier_dense_softmax_inner_prod_0_split needs backward computation.
+I0508 16:16:08.582353 123910 net.cpp:192] dense_softmax_inner_prod needs backward computation.
+I0508 16:16:08.582368 123910 net.cpp:192] conv_decode1_bn needs backward computation.
+I0508 16:16:08.582382 123910 net.cpp:192] conv_decode1 needs backward computation.
+I0508 16:16:08.582397 123910 net.cpp:192] upsample1 needs backward computation.
+I0508 16:16:08.582413 123910 net.cpp:192] conv_decode2_bn needs backward computation.
+I0508 16:16:08.582428 123910 net.cpp:192] conv_decode2 needs backward computation.
+I0508 16:16:08.582443 123910 net.cpp:192] upsample2 needs backward computation.
+I0508 16:16:08.582459 123910 net.cpp:192] conv_decode3_bn needs backward computation.
+I0508 16:16:08.582473 123910 net.cpp:192] conv_decode3 needs backward computation.
+I0508 16:16:08.582489 123910 net.cpp:192] upsample3 needs backward computation.
+I0508 16:16:08.582504 123910 net.cpp:192] conv_decode4_bn needs backward computation.
+I0508 16:16:08.582517 123910 net.cpp:192] conv_decode4 needs backward computation.
+I0508 16:16:08.582531 123910 net.cpp:192] upsample4 needs backward computation.
+I0508 16:16:08.582546 123910 net.cpp:192] pool4 needs backward computation.
+I0508 16:16:08.582561 123910 net.cpp:192] relu4 needs backward computation.
+I0508 16:16:08.582576 123910 net.cpp:192] conv4_bn needs backward computation.
+I0508 16:16:08.582588 123910 net.cpp:192] conv4 needs backward computation.
+I0508 16:16:08.582603 123910 net.cpp:192] pool3 needs backward computation.
+I0508 16:16:08.582617 123910 net.cpp:192] relu3 needs backward computation.
+I0508 16:16:08.582631 123910 net.cpp:192] conv3_bn needs backward computation.
+I0508 16:16:08.582644 123910 net.cpp:192] conv3 needs backward computation.
+I0508 16:16:08.582659 123910 net.cpp:192] pool2 needs backward computation.
+I0508 16:16:08.582674 123910 net.cpp:192] relu2 needs backward computation.
+I0508 16:16:08.582687 123910 net.cpp:192] conv2_bn needs backward computation.
+I0508 16:16:08.582700 123910 net.cpp:192] conv2 needs backward computation.
+I0508 16:16:08.582715 123910 net.cpp:192] pool1 needs backward computation.
+I0508 16:16:08.582728 123910 net.cpp:192] relu1 needs backward computation.
+I0508 16:16:08.582742 123910 net.cpp:192] conv1_bn needs backward computation.
+I0508 16:16:08.582756 123910 net.cpp:192] conv1 needs backward computation.
+I0508 16:16:08.582772 123910 net.cpp:194] norm does not need backward computation.
+I0508 16:16:08.582787 123910 net.cpp:194] label_data_1_split does not need backward computation.
+I0508 16:16:08.582839 123910 net.cpp:194] data does not need backward computation.
+I0508 16:16:08.582867 123910 net.cpp:235] This network produces output accuracy
+I0508 16:16:08.582882 123910 net.cpp:235] This network produces output loss
+I0508 16:16:08.582897 123910 net.cpp:235] This network produces output per_class_accuracy
+I0508 16:16:08.582954 123910 net.cpp:482] Collecting Learning Rate and Weight Decay.
+I0508 16:16:08.582978 123910 net.cpp:247] Network initialization done.
+I0508 16:16:08.582993 123910 net.cpp:248] Memory required for data: 4109260852
+I0508 16:16:08.621635 123910 net.cpp:287] The NetState phase (1) differed from the phase (0) specified by a rule in layer data
+I0508 16:16:08.621685 123910 net.cpp:287] The NetState phase (1) differed from the phase (0) specified by a rule in layer flow
+I0508 16:16:08.621703 123910 net.cpp:287] The NetState phase (1) differed from the phase (0) specified by a rule in layer label
+I0508 16:16:08.622295 123910 net.cpp:42] Initializing net from parameters: 
+name: "segnet"
+state {
+  phase: TEST
+}
+layer {
+  name: "data"
+  type: "Data"
+  top: "data"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    mean_value: 0
+    mean_value: 0
+    mean_value: 0
+  }
+  data_param {
+    source: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidtrainvalfmp480360f1b1f2b2f4b4np_lmdb/val-lmdb"
+    batch_size: 4
+    backend: LMDB
+  }
+}
+layer {
+  name: "flow"
+  type: "Data"
+  top: "flow"
+  include {
+    phase: TEST
+  }
+  data_param {
+    source: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidtrainvalfmp480360f1b1f2b2f4b4np_lmdb/val-flow-lmdb"
+    batch_size: 4
+    backend: LMDB
+  }
+}
+layer {
+  name: "label"
+  type: "Data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  data_param {
+    source: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidtrainvalfmp480360f1b1f2b2f4b4np_lmdb/val-label-lmdb"
+    batch_size: 4
+    backend: LMDB
+  }
+}
+layer {
+  name: "normdata"
+  type: "LRN"
+  bottom: "data"
+  top: "normdata"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "normflow"
+  type: "LRN"
+  bottom: "flow"
+  top: "normflow"
+  lrn_param {
+    local_size: 5
+    alpha: 0.0001
+    beta: 0.75
+  }
+}
+layer {
+  name: "conv1_flow"
+  type: "Convolution"
+  bottom: "normflow"
+  top: "conv1_flow"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+  }
+}
+layer {
+  name: "conv1_flow_bn"
+  type: "BN"
+  bottom: "conv1_flow"
+  top: "conv1_flow"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+    bn_mode: LEARN
+  }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "normdata"
+  top: "conv1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv1_bn"
+  type: "BN"
+  bottom: "conv1"
+  top: "conv1"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+    bn_mode: LEARN
+  }
+}
+layer {
+  name: "concat"
+  type: "Concat"
+  bottom: "conv1"
+  bottom: "conv1_flow"
+  top: "conv1_concat"
+  concat_param {
+    axis: 1
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "conv1_concat"
+  top: "conv1_concat"
+}
+layer {
+  name: "pool1"
+  type: "Pooling"
+  bottom: "conv1_concat"
+  top: "pool1"
+  top: "pool1_mask"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv2_flow"
+  type: "Convolution"
+  bottom: "pool1"
+  top: "conv2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+  }
+}
+layer {
+  name: "conv2_bn"
+  type: "BN"
+  bottom: "conv2"
+  top: "conv2"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+    bn_mode: LEARN
+  }
+}
+layer {
+  name: "relu2"
+  type: "ReLU"
+  bottom: "conv2"
+  top: "conv2"
+}
+layer {
+  name: "pool2"
+  type: "Pooling"
+  bottom: "conv2"
+  top: "pool2"
+  top: "pool2_mask"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv3"
+  type: "Convolution"
+  bottom: "pool2"
+  top: "conv3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv3_bn"
+  type: "BN"
+  bottom: "conv3"
+  top: "conv3"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+    bn_mode: LEARN
+  }
+}
+layer {
+  name: "relu3"
+  type: "ReLU"
+  bottom: "conv3"
+  top: "conv3"
+}
+layer {
+  name: "pool3"
+  type: "Pooling"
+  bottom: "conv3"
+  top: "pool3"
+  top: "pool3_mask"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "conv4"
+  type: "Convolution"
+  bottom: "pool3"
+  top: "conv4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv4_bn"
+  type: "BN"
+  bottom: "conv4"
+  top: "conv4"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+    bn_mode: LEARN
+  }
+}
+layer {
+  name: "relu4"
+  type: "ReLU"
+  bottom: "conv4"
+  top: "conv4"
+}
+layer {
+  name: "pool4"
+  type: "Pooling"
+  bottom: "conv4"
+  top: "pool4"
+  top: "pool4_mask"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+layer {
+  name: "upsample4"
+  type: "Upsample"
+  bottom: "pool4"
+  bottom: "pool4_mask"
+  top: "upsample4"
+  upsample_param {
+    scale: 2
+    pad_out_h: true
+  }
+}
+layer {
+  name: "conv_decode4"
+  type: "Convolution"
+  bottom: "upsample4"
+  top: "conv_decode4"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv_decode4_bn"
+  type: "BN"
+  bottom: "conv_decode4"
+  top: "conv_decode4"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+    bn_mode: LEARN
+  }
+}
+layer {
+  name: "upsample3"
+  type: "Upsample"
+  bottom: "conv_decode4"
+  bottom: "pool3_mask"
+  top: "upsample3"
+  upsample_param {
+    scale: 2
+  }
+}
+layer {
+  name: "conv_decode3"
+  type: "Convolution"
+  bottom: "upsample3"
+  top: "conv_decode3"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "conv_decode3_bn"
+  type: "BN"
+  bottom: "conv_decode3"
+  top: "conv_decode3"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+    bn_mode: LEARN
+  }
+}
+layer {
+  name: "upsample2"
+  type: "Upsample"
+  bottom: "conv_decode3"
+  bottom: "pool2_mask"
+  top: "upsample2"
+  upsample_param {
+    scale: 2
+  }
+}
+layer {
+  name: "conv_decode2_flow"
+  type: "Convolution"
+  bottom: "upsample2"
+  top: "conv_decode2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 128
+    pad: 3
+    kernel_size: 7
+  }
+}
+layer {
+  name: "conv_decode2_bn_flow"
+  type: "BN"
+  bottom: "conv_decode2"
+  top: "conv_decode2"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+    bn_mode: LEARN
+  }
+}
+layer {
+  name: "upsample1"
+  type: "Upsample"
+  bottom: "conv_decode2"
+  bottom: "pool1_mask"
+  top: "upsample1"
+  upsample_param {
+    scale: 2
+  }
+}
+layer {
+  name: "conv_decode1_flow"
+  type: "Convolution"
+  bottom: "upsample1"
+  top: "conv_decode1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 64
+    pad: 3
+    kernel_size: 7
+  }
+}
+layer {
+  name: "conv_decode1_bn"
+  type: "BN"
+  bottom: "conv_decode1"
+  top: "conv_decode1"
+  bn_param {
+    scale_filler {
+      type: "constant"
+      value: 1
+    }
+    shift_filler {
+      type: "constant"
+      value: 0.001
+    }
+    bn_mode: LEARN
+  }
+}
+layer {
+  name: "dense_softmax_inner_prod"
+  type: "Convolution"
+  bottom: "conv_decode1"
+  top: "conv_classifier"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 11
+    kernel_size: 1
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  bottom: "conv_classifier"
+  bottom: "label"
+  top: "loss"
+  loss_param {
+    ignore_label: 11
+    weight_by_label_freqs: true
+    class_weighting: 0.2595
+    class_weighting: 0.1826
+    class_weighting: 4.564
+    class_weighting: 0.1417
+    class_weighting: 0.9051
+    class_weighting: 0.3826
+    class_weighting: 9.6446
+    class_weighting: 1.8418
+    class_weighting: 0.6823
+    class_weighting: 6.2478
+    class_weighting: 7.3614
+  }
+  softmax_param {
+    engine: CAFFE
+  }
+}
+layer {
+  name: "accuracy"
+  type: "Accuracy"
+  bottom: "conv_classifier"
+  bottom: "label"
+  top: "accuracy"
+  top: "per_class_accuracy"
+}
+I0508 16:16:08.622598 123910 layer_factory.hpp:74] Creating layer data
+I0508 16:16:08.622648 123910 net.cpp:90] Creating Layer data
+I0508 16:16:08.622670 123910 net.cpp:368] data -> data
+I0508 16:16:08.622695 123910 net.cpp:120] Setting up data
+I0508 16:16:08.660868 123910 db.cpp:34] Opened lmdb /scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidtrainvalfmp480360f1b1f2b2f4b4np_lmdb/val-lmdb
+I0508 16:16:08.665796 123910 data_layer.cpp:52] output data size: 4,3,360,480
+I0508 16:16:08.672986 123910 net.cpp:127] Top shape: 4 3 360 480 (2073600)
+I0508 16:16:08.673032 123910 layer_factory.hpp:74] Creating layer flow
+I0508 16:16:08.673074 123910 net.cpp:90] Creating Layer flow
+I0508 16:16:08.673092 123910 net.cpp:368] flow -> flow
+I0508 16:16:08.673113 123910 net.cpp:120] Setting up flow
+I0508 16:16:08.697631 123910 db.cpp:34] Opened lmdb /scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidtrainvalfmp480360f1b1f2b2f4b4np_lmdb/val-flow-lmdb
+I0508 16:16:08.703059 123910 data_layer.cpp:52] output data size: 4,12,360,480
+I0508 16:16:08.741320 123910 net.cpp:127] Top shape: 4 12 360 480 (8294400)
+I0508 16:16:08.741364 123910 layer_factory.hpp:74] Creating layer label
+I0508 16:16:08.741389 123910 net.cpp:90] Creating Layer label
+I0508 16:16:08.741406 123910 net.cpp:368] label -> label
+I0508 16:16:08.741426 123910 net.cpp:120] Setting up label
+I0508 16:16:08.799629 123910 db.cpp:34] Opened lmdb /scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidtrainvalfmp480360f1b1f2b2f4b4np_lmdb/val-label-lmdb
+I0508 16:16:08.799962 123910 data_layer.cpp:52] output data size: 4,1,360,480
+I0508 16:16:08.802079 123910 net.cpp:127] Top shape: 4 1 360 480 (691200)
+I0508 16:16:08.802112 123910 layer_factory.hpp:74] Creating layer label_label_0_split
+I0508 16:16:08.802135 123910 net.cpp:90] Creating Layer label_label_0_split
+I0508 16:16:08.802150 123910 net.cpp:410] label_label_0_split <- label
+I0508 16:16:08.802170 123910 net.cpp:368] label_label_0_split -> label_label_0_split_0
+I0508 16:16:08.802191 123910 net.cpp:368] label_label_0_split -> label_label_0_split_1
+I0508 16:16:08.802211 123910 net.cpp:120] Setting up label_label_0_split
+I0508 16:16:08.802230 123910 net.cpp:127] Top shape: 4 1 360 480 (691200)
+I0508 16:16:08.802263 123910 net.cpp:127] Top shape: 4 1 360 480 (691200)
+I0508 16:16:08.802278 123910 layer_factory.hpp:74] Creating layer normdata
+I0508 16:16:08.802300 123910 net.cpp:90] Creating Layer normdata
+I0508 16:16:08.802314 123910 net.cpp:410] normdata <- data
+I0508 16:16:08.802330 123910 net.cpp:368] normdata -> normdata
+I0508 16:16:08.802345 123910 net.cpp:120] Setting up normdata
+I0508 16:16:08.802363 123910 net.cpp:127] Top shape: 4 3 360 480 (2073600)
+I0508 16:16:08.802376 123910 layer_factory.hpp:74] Creating layer normflow
+I0508 16:16:08.802392 123910 net.cpp:90] Creating Layer normflow
+I0508 16:16:08.802403 123910 net.cpp:410] normflow <- flow
+I0508 16:16:08.802417 123910 net.cpp:368] normflow -> normflow
+I0508 16:16:08.802433 123910 net.cpp:120] Setting up normflow
+I0508 16:16:08.802449 123910 net.cpp:127] Top shape: 4 12 360 480 (8294400)
+I0508 16:16:08.802462 123910 layer_factory.hpp:74] Creating layer conv1_flow
+I0508 16:16:08.802481 123910 net.cpp:90] Creating Layer conv1_flow
+I0508 16:16:08.802495 123910 net.cpp:410] conv1_flow <- normflow
+I0508 16:16:08.802508 123910 net.cpp:368] conv1_flow -> conv1_flow
+I0508 16:16:08.802525 123910 net.cpp:120] Setting up conv1_flow
+I0508 16:16:08.804303 123910 net.cpp:127] Top shape: 4 64 360 480 (44236800)
+I0508 16:16:08.804355 123910 layer_factory.hpp:74] Creating layer conv1_flow_bn
+I0508 16:16:08.804381 123910 net.cpp:90] Creating Layer conv1_flow_bn
+I0508 16:16:08.804397 123910 net.cpp:410] conv1_flow_bn <- conv1_flow
+I0508 16:16:08.804414 123910 net.cpp:357] conv1_flow_bn -> conv1_flow (in-place)
+I0508 16:16:08.804433 123910 net.cpp:120] Setting up conv1_flow_bn
+I0508 16:16:08.805238 123910 net.cpp:127] Top shape: 4 64 360 480 (44236800)
+I0508 16:16:08.805272 123910 layer_factory.hpp:74] Creating layer conv1
+I0508 16:16:08.805299 123910 net.cpp:90] Creating Layer conv1
+I0508 16:16:08.805315 123910 net.cpp:410] conv1 <- normdata
+I0508 16:16:08.805333 123910 net.cpp:368] conv1 -> conv1
+I0508 16:16:08.805354 123910 net.cpp:120] Setting up conv1
+I0508 16:16:08.807107 123910 net.cpp:127] Top shape: 4 64 360 480 (44236800)
+I0508 16:16:08.807157 123910 layer_factory.hpp:74] Creating layer conv1_bn
+I0508 16:16:08.807180 123910 net.cpp:90] Creating Layer conv1_bn
+I0508 16:16:08.807195 123910 net.cpp:410] conv1_bn <- conv1
+I0508 16:16:08.807214 123910 net.cpp:357] conv1_bn -> conv1 (in-place)
+I0508 16:16:08.807232 123910 net.cpp:120] Setting up conv1_bn
+I0508 16:16:08.808151 123910 net.cpp:127] Top shape: 4 64 360 480 (44236800)
+I0508 16:16:08.808182 123910 layer_factory.hpp:74] Creating layer concat
+I0508 16:16:08.808207 123910 net.cpp:90] Creating Layer concat
+I0508 16:16:08.808221 123910 net.cpp:410] concat <- conv1
+I0508 16:16:08.808235 123910 net.cpp:410] concat <- conv1_flow
+I0508 16:16:08.808251 123910 net.cpp:368] concat -> conv1_concat
+I0508 16:16:08.808269 123910 net.cpp:120] Setting up concat
+I0508 16:16:08.808296 123910 net.cpp:127] Top shape: 4 128 360 480 (88473600)
+I0508 16:16:08.808311 123910 layer_factory.hpp:74] Creating layer relu1
+I0508 16:16:08.808328 123910 net.cpp:90] Creating Layer relu1
+I0508 16:16:08.808342 123910 net.cpp:410] relu1 <- conv1_concat
+I0508 16:16:08.808359 123910 net.cpp:357] relu1 -> conv1_concat (in-place)
+I0508 16:16:08.808375 123910 net.cpp:120] Setting up relu1
+I0508 16:16:08.808634 123910 net.cpp:127] Top shape: 4 128 360 480 (88473600)
+I0508 16:16:08.808665 123910 layer_factory.hpp:74] Creating layer pool1
+I0508 16:16:08.808681 123910 layer_factory.cpp:55] CUDNN does not support padding or multiple tops. Using Caffe's own pooling layer.
+I0508 16:16:08.808699 123910 net.cpp:90] Creating Layer pool1
+I0508 16:16:08.808713 123910 net.cpp:410] pool1 <- conv1_concat
+I0508 16:16:08.808728 123910 net.cpp:368] pool1 -> pool1
+I0508 16:16:08.808748 123910 net.cpp:368] pool1 -> pool1_mask
+I0508 16:16:08.808764 123910 net.cpp:120] Setting up pool1
+I0508 16:16:08.808784 123910 net.cpp:127] Top shape: 4 128 180 240 (22118400)
+I0508 16:16:08.808799 123910 net.cpp:127] Top shape: 4 128 180 240 (22118400)
+I0508 16:16:08.808827 123910 layer_factory.hpp:74] Creating layer conv2_flow
+I0508 16:16:08.808859 123910 net.cpp:90] Creating Layer conv2_flow
+I0508 16:16:08.808878 123910 net.cpp:410] conv2_flow <- pool1
+I0508 16:16:08.808894 123910 net.cpp:368] conv2_flow -> conv2
+I0508 16:16:08.808922 123910 net.cpp:120] Setting up conv2_flow
+I0508 16:16:08.811890 123910 net.cpp:127] Top shape: 4 64 180 240 (11059200)
+I0508 16:16:08.811940 123910 layer_factory.hpp:74] Creating layer conv2_bn
+I0508 16:16:08.811964 123910 net.cpp:90] Creating Layer conv2_bn
+I0508 16:16:08.811980 123910 net.cpp:410] conv2_bn <- conv2
+I0508 16:16:08.812000 123910 net.cpp:357] conv2_bn -> conv2 (in-place)
+I0508 16:16:08.812018 123910 net.cpp:120] Setting up conv2_bn
+I0508 16:16:08.812338 123910 net.cpp:127] Top shape: 4 64 180 240 (11059200)
+I0508 16:16:08.812369 123910 layer_factory.hpp:74] Creating layer relu2
+I0508 16:16:08.812389 123910 net.cpp:90] Creating Layer relu2
+I0508 16:16:08.812403 123910 net.cpp:410] relu2 <- conv2
+I0508 16:16:08.812419 123910 net.cpp:357] relu2 -> conv2 (in-place)
+I0508 16:16:08.812439 123910 net.cpp:120] Setting up relu2
+I0508 16:16:08.812891 123910 net.cpp:127] Top shape: 4 64 180 240 (11059200)
+I0508 16:16:08.812932 123910 layer_factory.hpp:74] Creating layer pool2
+I0508 16:16:08.812949 123910 layer_factory.cpp:55] CUDNN does not support padding or multiple tops. Using Caffe's own pooling layer.
+I0508 16:16:08.812978 123910 net.cpp:90] Creating Layer pool2
+I0508 16:16:08.812994 123910 net.cpp:410] pool2 <- conv2
+I0508 16:16:08.813010 123910 net.cpp:368] pool2 -> pool2
+I0508 16:16:08.813030 123910 net.cpp:368] pool2 -> pool2_mask
+I0508 16:16:08.813048 123910 net.cpp:120] Setting up pool2
+I0508 16:16:08.813068 123910 net.cpp:127] Top shape: 4 64 90 120 (2764800)
+I0508 16:16:08.813083 123910 net.cpp:127] Top shape: 4 64 90 120 (2764800)
+I0508 16:16:08.813096 123910 layer_factory.hpp:74] Creating layer conv3
+I0508 16:16:08.813117 123910 net.cpp:90] Creating Layer conv3
+I0508 16:16:08.813132 123910 net.cpp:410] conv3 <- pool2
+I0508 16:16:08.813148 123910 net.cpp:368] conv3 -> conv3
+I0508 16:16:08.813181 123910 net.cpp:120] Setting up conv3
+I0508 16:16:08.819224 123910 net.cpp:127] Top shape: 4 64 90 120 (2764800)
+I0508 16:16:08.819269 123910 layer_factory.hpp:74] Creating layer conv3_bn
+I0508 16:16:08.819294 123910 net.cpp:90] Creating Layer conv3_bn
+I0508 16:16:08.819310 123910 net.cpp:410] conv3_bn <- conv3
+I0508 16:16:08.819331 123910 net.cpp:357] conv3_bn -> conv3 (in-place)
+I0508 16:16:08.819351 123910 net.cpp:120] Setting up conv3_bn
+I0508 16:16:08.819449 123910 net.cpp:127] Top shape: 4 64 90 120 (2764800)
+I0508 16:16:08.819473 123910 layer_factory.hpp:74] Creating layer relu3
+I0508 16:16:08.819490 123910 net.cpp:90] Creating Layer relu3
+I0508 16:16:08.819504 123910 net.cpp:410] relu3 <- conv3
+I0508 16:16:08.819521 123910 net.cpp:357] relu3 -> conv3 (in-place)
+I0508 16:16:08.819537 123910 net.cpp:120] Setting up relu3
+I0508 16:16:08.819787 123910 net.cpp:127] Top shape: 4 64 90 120 (2764800)
+I0508 16:16:08.819815 123910 layer_factory.hpp:74] Creating layer pool3
+I0508 16:16:08.819830 123910 layer_factory.cpp:55] CUDNN does not support padding or multiple tops. Using Caffe's own pooling layer.
+I0508 16:16:08.824095 123910 net.cpp:90] Creating Layer pool3
+I0508 16:16:08.824129 123910 net.cpp:410] pool3 <- conv3
+I0508 16:16:08.824147 123910 net.cpp:368] pool3 -> pool3
+I0508 16:16:08.824172 123910 net.cpp:368] pool3 -> pool3_mask
+I0508 16:16:08.824190 123910 net.cpp:120] Setting up pool3
+I0508 16:16:08.824211 123910 net.cpp:127] Top shape: 4 64 45 60 (691200)
+I0508 16:16:08.824226 123910 net.cpp:127] Top shape: 4 64 45 60 (691200)
+I0508 16:16:08.824239 123910 layer_factory.hpp:74] Creating layer conv4
+I0508 16:16:08.824259 123910 net.cpp:90] Creating Layer conv4
+I0508 16:16:08.824272 123910 net.cpp:410] conv4 <- pool3
+I0508 16:16:08.824290 123910 net.cpp:368] conv4 -> conv4
+I0508 16:16:08.824308 123910 net.cpp:120] Setting up conv4
+I0508 16:16:08.830214 123910 net.cpp:127] Top shape: 4 64 45 60 (691200)
+I0508 16:16:08.830265 123910 layer_factory.hpp:74] Creating layer conv4_bn
+I0508 16:16:08.830308 123910 net.cpp:90] Creating Layer conv4_bn
+I0508 16:16:08.830328 123910 net.cpp:410] conv4_bn <- conv4
+I0508 16:16:08.830348 123910 net.cpp:357] conv4_bn -> conv4 (in-place)
+I0508 16:16:08.830368 123910 net.cpp:120] Setting up conv4_bn
+I0508 16:16:08.830413 123910 net.cpp:127] Top shape: 4 64 45 60 (691200)
+I0508 16:16:08.830435 123910 layer_factory.hpp:74] Creating layer relu4
+I0508 16:16:08.830452 123910 net.cpp:90] Creating Layer relu4
+I0508 16:16:08.830466 123910 net.cpp:410] relu4 <- conv4
+I0508 16:16:08.830481 123910 net.cpp:357] relu4 -> conv4 (in-place)
+I0508 16:16:08.830497 123910 net.cpp:120] Setting up relu4
+I0508 16:16:08.830746 123910 net.cpp:127] Top shape: 4 64 45 60 (691200)
+I0508 16:16:08.830775 123910 layer_factory.hpp:74] Creating layer pool4
+I0508 16:16:08.830791 123910 layer_factory.cpp:55] CUDNN does not support padding or multiple tops. Using Caffe's own pooling layer.
+I0508 16:16:08.830806 123910 net.cpp:90] Creating Layer pool4
+I0508 16:16:08.830821 123910 net.cpp:410] pool4 <- conv4
+I0508 16:16:08.830838 123910 net.cpp:368] pool4 -> pool4
+I0508 16:16:08.830869 123910 net.cpp:368] pool4 -> pool4_mask
+I0508 16:16:08.830888 123910 net.cpp:120] Setting up pool4
+I0508 16:16:08.830907 123910 net.cpp:127] Top shape: 4 64 23 30 (176640)
+I0508 16:16:08.830921 123910 net.cpp:127] Top shape: 4 64 23 30 (176640)
+I0508 16:16:08.830935 123910 layer_factory.hpp:74] Creating layer upsample4
+I0508 16:16:08.830951 123910 net.cpp:90] Creating Layer upsample4
+I0508 16:16:08.830965 123910 net.cpp:410] upsample4 <- pool4
+I0508 16:16:08.830978 123910 net.cpp:410] upsample4 <- pool4_mask
+I0508 16:16:08.830996 123910 net.cpp:368] upsample4 -> upsample4
+I0508 16:16:08.831014 123910 net.cpp:120] Setting up upsample4
+I0508 16:16:08.831027 123910 upsample_layer.cpp:31] Params 'pad_out_{}_' are deprecated. Please declare upsample height and width useing the upsample_h, upsample_w parameters.
+I0508 16:16:08.831043 123910 net.cpp:127] Top shape: 4 64 45 60 (691200)
+I0508 16:16:08.831056 123910 layer_factory.hpp:74] Creating layer conv_decode4
+I0508 16:16:08.831079 123910 net.cpp:90] Creating Layer conv_decode4
+I0508 16:16:08.831094 123910 net.cpp:410] conv_decode4 <- upsample4
+I0508 16:16:08.831110 123910 net.cpp:368] conv_decode4 -> conv_decode4
+I0508 16:16:08.831127 123910 net.cpp:120] Setting up conv_decode4
+I0508 16:16:08.837117 123910 net.cpp:127] Top shape: 4 64 45 60 (691200)
+I0508 16:16:08.837163 123910 layer_factory.hpp:74] Creating layer conv_decode4_bn
+I0508 16:16:08.837188 123910 net.cpp:90] Creating Layer conv_decode4_bn
+I0508 16:16:08.837204 123910 net.cpp:410] conv_decode4_bn <- conv_decode4
+I0508 16:16:08.837220 123910 net.cpp:357] conv_decode4_bn -> conv_decode4 (in-place)
+I0508 16:16:08.837239 123910 net.cpp:120] Setting up conv_decode4_bn
+I0508 16:16:08.837291 123910 net.cpp:127] Top shape: 4 64 45 60 (691200)
+I0508 16:16:08.837311 123910 layer_factory.hpp:74] Creating layer upsample3
+I0508 16:16:08.837328 123910 net.cpp:90] Creating Layer upsample3
+I0508 16:16:08.837342 123910 net.cpp:410] upsample3 <- conv_decode4
+I0508 16:16:08.837354 123910 net.cpp:410] upsample3 <- pool3_mask
+I0508 16:16:08.837373 123910 net.cpp:368] upsample3 -> upsample3
+I0508 16:16:08.837391 123910 net.cpp:120] Setting up upsample3
+I0508 16:16:08.837404 123910 upsample_layer.cpp:31] Params 'pad_out_{}_' are deprecated. Please declare upsample height and width useing the upsample_h, upsample_w parameters.
+I0508 16:16:08.837420 123910 net.cpp:127] Top shape: 4 64 90 120 (2764800)
+I0508 16:16:08.837433 123910 layer_factory.hpp:74] Creating layer conv_decode3
+I0508 16:16:08.837451 123910 net.cpp:90] Creating Layer conv_decode3
+I0508 16:16:08.837465 123910 net.cpp:410] conv_decode3 <- upsample3
+I0508 16:16:08.837481 123910 net.cpp:368] conv_decode3 -> conv_decode3
+I0508 16:16:08.837497 123910 net.cpp:120] Setting up conv_decode3
+I0508 16:16:08.843528 123910 net.cpp:127] Top shape: 4 64 90 120 (2764800)
+I0508 16:16:08.843572 123910 layer_factory.hpp:74] Creating layer conv_decode3_bn
+I0508 16:16:08.843612 123910 net.cpp:90] Creating Layer conv_decode3_bn
+I0508 16:16:08.843631 123910 net.cpp:410] conv_decode3_bn <- conv_decode3
+I0508 16:16:08.843648 123910 net.cpp:357] conv_decode3_bn -> conv_decode3 (in-place)
+I0508 16:16:08.843667 123910 net.cpp:120] Setting up conv_decode3_bn
+I0508 16:16:08.843770 123910 net.cpp:127] Top shape: 4 64 90 120 (2764800)
+I0508 16:16:08.843793 123910 layer_factory.hpp:74] Creating layer upsample2
+I0508 16:16:08.843811 123910 net.cpp:90] Creating Layer upsample2
+I0508 16:16:08.843824 123910 net.cpp:410] upsample2 <- conv_decode3
+I0508 16:16:08.843838 123910 net.cpp:410] upsample2 <- pool2_mask
+I0508 16:16:08.843863 123910 net.cpp:368] upsample2 -> upsample2
+I0508 16:16:08.843883 123910 net.cpp:120] Setting up upsample2
+I0508 16:16:08.843896 123910 upsample_layer.cpp:31] Params 'pad_out_{}_' are deprecated. Please declare upsample height and width useing the upsample_h, upsample_w parameters.
+I0508 16:16:08.843912 123910 net.cpp:127] Top shape: 4 64 180 240 (11059200)
+I0508 16:16:08.843925 123910 layer_factory.hpp:74] Creating layer conv_decode2_flow
+I0508 16:16:08.843952 123910 net.cpp:90] Creating Layer conv_decode2_flow
+I0508 16:16:08.843967 123910 net.cpp:410] conv_decode2_flow <- upsample2
+I0508 16:16:08.843984 123910 net.cpp:368] conv_decode2_flow -> conv_decode2
+I0508 16:16:08.844002 123910 net.cpp:120] Setting up conv_decode2_flow
+I0508 16:16:08.847021 123910 net.cpp:127] Top shape: 4 128 180 240 (22118400)
+I0508 16:16:08.847067 123910 layer_factory.hpp:74] Creating layer conv_decode2_bn_flow
+I0508 16:16:08.847093 123910 net.cpp:90] Creating Layer conv_decode2_bn_flow
+I0508 16:16:08.847110 123910 net.cpp:410] conv_decode2_bn_flow <- conv_decode2
+I0508 16:16:08.847126 123910 net.cpp:357] conv_decode2_bn_flow -> conv_decode2 (in-place)
+I0508 16:16:08.847144 123910 net.cpp:120] Setting up conv_decode2_bn_flow
+I0508 16:16:08.847466 123910 net.cpp:127] Top shape: 4 128 180 240 (22118400)
+I0508 16:16:08.847496 123910 layer_factory.hpp:74] Creating layer upsample1
+I0508 16:16:08.847512 123910 net.cpp:90] Creating Layer upsample1
+I0508 16:16:08.847527 123910 net.cpp:410] upsample1 <- conv_decode2
+I0508 16:16:08.847540 123910 net.cpp:410] upsample1 <- pool1_mask
+I0508 16:16:08.847555 123910 net.cpp:368] upsample1 -> upsample1
+I0508 16:16:08.847573 123910 net.cpp:120] Setting up upsample1
+I0508 16:16:08.847586 123910 upsample_layer.cpp:31] Params 'pad_out_{}_' are deprecated. Please declare upsample height and width useing the upsample_h, upsample_w parameters.
+I0508 16:16:08.847602 123910 net.cpp:127] Top shape: 4 128 360 480 (88473600)
+I0508 16:16:08.847615 123910 layer_factory.hpp:74] Creating layer conv_decode1_flow
+I0508 16:16:08.847636 123910 net.cpp:90] Creating Layer conv_decode1_flow
+I0508 16:16:08.847651 123910 net.cpp:410] conv_decode1_flow <- upsample1
+I0508 16:16:08.847666 123910 net.cpp:368] conv_decode1_flow -> conv_decode1
+I0508 16:16:08.847687 123910 net.cpp:120] Setting up conv_decode1_flow
+I0508 16:16:08.851114 123910 net.cpp:127] Top shape: 4 64 360 480 (44236800)
+I0508 16:16:08.851168 123910 layer_factory.hpp:74] Creating layer conv_decode1_bn
+I0508 16:16:08.851192 123910 net.cpp:90] Creating Layer conv_decode1_bn
+I0508 16:16:08.851208 123910 net.cpp:410] conv_decode1_bn <- conv_decode1
+I0508 16:16:08.851227 123910 net.cpp:357] conv_decode1_bn -> conv_decode1 (in-place)
+I0508 16:16:08.851246 123910 net.cpp:120] Setting up conv_decode1_bn
+I0508 16:16:08.852417 123910 net.cpp:127] Top shape: 4 64 360 480 (44236800)
+I0508 16:16:08.852450 123910 layer_factory.hpp:74] Creating layer dense_softmax_inner_prod
+I0508 16:16:08.852480 123910 net.cpp:90] Creating Layer dense_softmax_inner_prod
+I0508 16:16:08.852495 123910 net.cpp:410] dense_softmax_inner_prod <- conv_decode1
+I0508 16:16:08.852512 123910 net.cpp:368] dense_softmax_inner_prod -> conv_classifier
+I0508 16:16:08.852530 123910 net.cpp:120] Setting up dense_softmax_inner_prod
+I0508 16:16:08.854336 123910 net.cpp:127] Top shape: 4 11 360 480 (7603200)
+I0508 16:16:08.854382 123910 layer_factory.hpp:74] Creating layer conv_classifier_dense_softmax_inner_prod_0_split
+I0508 16:16:08.854420 123910 net.cpp:90] Creating Layer conv_classifier_dense_softmax_inner_prod_0_split
+I0508 16:16:08.854439 123910 net.cpp:410] conv_classifier_dense_softmax_inner_prod_0_split <- conv_classifier
+I0508 16:16:08.854456 123910 net.cpp:368] conv_classifier_dense_softmax_inner_prod_0_split -> conv_classifier_dense_softmax_inner_prod_0_split_0
+I0508 16:16:08.854476 123910 net.cpp:368] conv_classifier_dense_softmax_inner_prod_0_split -> conv_classifier_dense_softmax_inner_prod_0_split_1
+I0508 16:16:08.854493 123910 net.cpp:120] Setting up conv_classifier_dense_softmax_inner_prod_0_split
+I0508 16:16:08.854511 123910 net.cpp:127] Top shape: 4 11 360 480 (7603200)
+I0508 16:16:08.854526 123910 net.cpp:127] Top shape: 4 11 360 480 (7603200)
+I0508 16:16:08.854539 123910 layer_factory.hpp:74] Creating layer loss
+I0508 16:16:08.854558 123910 net.cpp:90] Creating Layer loss
+I0508 16:16:08.854573 123910 net.cpp:410] loss <- conv_classifier_dense_softmax_inner_prod_0_split_0
+I0508 16:16:08.854586 123910 net.cpp:410] loss <- label_label_0_split_0
+I0508 16:16:08.854605 123910 net.cpp:368] loss -> loss
+I0508 16:16:08.854631 123910 net.cpp:120] Setting up loss
+I0508 16:16:08.854650 123910 layer_factory.hpp:74] Creating layer loss
+I0508 16:16:08.886263 123910 net.cpp:127] Top shape: (1)
+I0508 16:16:08.886332 123910 net.cpp:129]     with loss weight 1
+I0508 16:16:08.886360 123910 layer_factory.hpp:74] Creating layer accuracy
+I0508 16:16:08.886385 123910 net.cpp:90] Creating Layer accuracy
+I0508 16:16:08.886404 123910 net.cpp:410] accuracy <- conv_classifier_dense_softmax_inner_prod_0_split_1
+I0508 16:16:08.886420 123910 net.cpp:410] accuracy <- label_label_0_split_1
+I0508 16:16:08.886436 123910 net.cpp:368] accuracy -> accuracy
+I0508 16:16:08.886456 123910 net.cpp:368] accuracy -> per_class_accuracy
+I0508 16:16:08.886476 123910 net.cpp:120] Setting up accuracy
+I0508 16:16:08.886492 123910 accuracy_layer.cpp:24] Per-class accuracies currently only work on TRAIN phase only.
+I0508 16:16:08.886508 123910 net.cpp:127] Top shape: (1)
+I0508 16:16:08.886523 123910 net.cpp:127] Top shape: 11 1 1 1 (11)
+I0508 16:16:08.886535 123910 net.cpp:194] accuracy does not need backward computation.
+I0508 16:16:08.886549 123910 net.cpp:192] loss needs backward computation.
+I0508 16:16:08.886562 123910 net.cpp:192] conv_classifier_dense_softmax_inner_prod_0_split needs backward computation.
+I0508 16:16:08.886574 123910 net.cpp:192] dense_softmax_inner_prod needs backward computation.
+I0508 16:16:08.886587 123910 net.cpp:192] conv_decode1_bn needs backward computation.
+I0508 16:16:08.886600 123910 net.cpp:192] conv_decode1_flow needs backward computation.
+I0508 16:16:08.886611 123910 net.cpp:192] upsample1 needs backward computation.
+I0508 16:16:08.886625 123910 net.cpp:192] conv_decode2_bn_flow needs backward computation.
+I0508 16:16:08.886636 123910 net.cpp:192] conv_decode2_flow needs backward computation.
+I0508 16:16:08.886648 123910 net.cpp:192] upsample2 needs backward computation.
+I0508 16:16:08.886662 123910 net.cpp:192] conv_decode3_bn needs backward computation.
+I0508 16:16:08.886674 123910 net.cpp:192] conv_decode3 needs backward computation.
+I0508 16:16:08.886687 123910 net.cpp:192] upsample3 needs backward computation.
+I0508 16:16:08.886699 123910 net.cpp:192] conv_decode4_bn needs backward computation.
+I0508 16:16:08.886711 123910 net.cpp:192] conv_decode4 needs backward computation.
+I0508 16:16:08.886723 123910 net.cpp:192] upsample4 needs backward computation.
+I0508 16:16:08.886736 123910 net.cpp:192] pool4 needs backward computation.
+I0508 16:16:08.886749 123910 net.cpp:192] relu4 needs backward computation.
+I0508 16:16:08.886760 123910 net.cpp:192] conv4_bn needs backward computation.
+I0508 16:16:08.886771 123910 net.cpp:192] conv4 needs backward computation.
+I0508 16:16:08.886785 123910 net.cpp:192] pool3 needs backward computation.
+I0508 16:16:08.886796 123910 net.cpp:192] relu3 needs backward computation.
+I0508 16:16:08.886808 123910 net.cpp:192] conv3_bn needs backward computation.
+I0508 16:16:08.886839 123910 net.cpp:192] conv3 needs backward computation.
+I0508 16:16:08.886863 123910 net.cpp:192] pool2 needs backward computation.
+I0508 16:16:08.886876 123910 net.cpp:192] relu2 needs backward computation.
+I0508 16:16:08.886888 123910 net.cpp:192] conv2_bn needs backward computation.
+I0508 16:16:08.886899 123910 net.cpp:192] conv2_flow needs backward computation.
+I0508 16:16:08.886911 123910 net.cpp:192] pool1 needs backward computation.
+I0508 16:16:08.886924 123910 net.cpp:192] relu1 needs backward computation.
+I0508 16:16:08.886935 123910 net.cpp:192] concat needs backward computation.
+I0508 16:16:08.886948 123910 net.cpp:192] conv1_bn needs backward computation.
+I0508 16:16:08.886960 123910 net.cpp:192] conv1 needs backward computation.
+I0508 16:16:08.886973 123910 net.cpp:192] conv1_flow_bn needs backward computation.
+I0508 16:16:08.886986 123910 net.cpp:192] conv1_flow needs backward computation.
+I0508 16:16:08.886997 123910 net.cpp:194] normflow does not need backward computation.
+I0508 16:16:08.887011 123910 net.cpp:194] normdata does not need backward computation.
+I0508 16:16:08.887024 123910 net.cpp:194] label_label_0_split does not need backward computation.
+I0508 16:16:08.887037 123910 net.cpp:194] label does not need backward computation.
+I0508 16:16:08.887049 123910 net.cpp:194] flow does not need backward computation.
+I0508 16:16:08.887060 123910 net.cpp:194] data does not need backward computation.
+I0508 16:16:08.887071 123910 net.cpp:235] This network produces output accuracy
+I0508 16:16:08.887084 123910 net.cpp:235] This network produces output loss
+I0508 16:16:08.887095 123910 net.cpp:235] This network produces output per_class_accuracy
+I0508 16:16:08.887145 123910 net.cpp:482] Collecting Learning Rate and Weight Decay.
+I0508 16:16:08.887168 123910 net.cpp:247] Network initialization done.
+I0508 16:16:08.887182 123910 net.cpp:248] Memory required for data: 2948689972
+net loaded successfully
+layer_names:
+conv1
+conv1_bn
+conv2
+conv2_bn
+conv3
+conv3_bn
+conv4
+conv4_bn
+conv_decode4
+conv_decode4_bn
+conv_decode3
+conv_decode3_bn
+conv_decode2
+conv_decode2_bn
+conv_decode1
+conv_decode1_bn
+dense_softmax_inner_prod
+-----------------
+net_full_conv loaded successfully
+conv2_flow weights are (64, 128, 7, 7) dimensionaland biases are (64,) dimensional
+conv_decode2_flow weights are (128, 64, 7, 7) dimensionaland biases are (128,) dimensional
+conv_decode1_flow weights are (64, 128, 7, 7) dimensionaland biases are (64,) dimensional
+conv_decode2_bn_flow weights are (1, 128, 1, 1) dimensionaland biases are (1, 128, 1, 1) dimensional
+conv2 weights are (64, 64, 7, 7) dimensionaland biases are (64,) dimensional
+conv_decode2 weights are (64, 64, 7, 7) dimensionaland biases are (64,) dimensional
+conv_decode1 weights are (64, 64, 7, 7) dimensionaland biases are (64,) dimensional
+conv_decode2_bn weights are (1, 64, 1, 1) dimensionaland biases are (1, 64, 1, 1) dimensional

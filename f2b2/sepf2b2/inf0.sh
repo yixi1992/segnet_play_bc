@@ -11,7 +11,7 @@
 #SBATCH --partition=gpu
 #SBATCH --mem=5000
 
-xixi='sepf1trgbmsrainit_bs4lr1e-3fixed'
+xixi='sepf1b1f2b2trgbbs4lr1e-3fixed'
 iter_s=0
 iter_e=12000
 iter_gap=1000
