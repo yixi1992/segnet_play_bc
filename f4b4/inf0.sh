@@ -15,7 +15,7 @@ xixi='f1b1f2b2f4b4trgbslicebs8lr1e-3fixed'
 bs=true
 slice=true
 fromrgb=true
-iter_s=0
+iter_s=4000
 iter_e=16000
 iter_gap=1000
 

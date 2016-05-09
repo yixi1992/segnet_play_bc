@@ -1,6 +1,6 @@
-net: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/segnet_basic_train_batchsize.prototxt"
+net: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/segnet_basic_train_fidl.prototxt"
 test_initialization: true
-test_iter: 10
+test_iter: 25
 test_interval: 100
 base_lr: 1e-3
 lr_policy: "fixed"
@@ -11,6 +11,6 @@ display: 20
 max_iter: 20000
 weight_decay: 0.0005
 snapshot: 1000
-snapshot_prefix: "/home-4/yixi@umd.edu/segnet/snapshots/trgbbs10learngglr1e-3fixed"
+snapshot_prefix: "/home-4/yixi@umd.edu/work/yixi/segnet/segnetf1/snapshots/f1trgbfidlbs4lr1e-3fixed"
 solver_mode: GPU 
 #solver_type: ADAGRAD

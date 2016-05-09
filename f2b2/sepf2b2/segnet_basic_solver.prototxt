@@ -11,6 +11,6 @@ display: 20
 max_iter: 20000
 weight_decay: 0.0005
 snapshot: 1000
-snapshot_prefix: "snapshots/sepf1b1trgbslicefidlbs4lr1e-3fixed"
+snapshot_prefix: "snapshots/sepf1b1f2b2trgbslicefidlbs4lr1e-3fixed"
 solver_mode: GPU 
 #solver_type: ADAGRAD

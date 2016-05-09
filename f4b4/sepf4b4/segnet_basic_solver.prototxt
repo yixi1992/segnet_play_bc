@@ -1,4 +1,4 @@
-net: "segnet_basic_train.prototxt"
+net: "segnet_basic_train_slice_fidl.prototxt"
 test_initialization: true
 test_iter: 25
 test_interval: 1000
@@ -11,6 +11,6 @@ display: 20
 max_iter: 20000
 weight_decay: 0.0005
 snapshot: 1000
-snapshot_prefix: "snapshots/sepf1b1f2b2f4b4trgbbs4lr1e-3fixed"
+snapshot_prefix: "snapshots/sepf1b1f2b2f4b4trgbslicefidlbs4lr1e-3fixed"
 solver_mode: GPU 
 #solver_type: ADAGRAD

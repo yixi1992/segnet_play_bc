@@ -1,6 +1,6 @@
-net: "segnet_basic_train_slice_batchsize.prototxt"
+net: "segnet_basic_train_slice_fidl.prototxt"
 test_initialization: true
-test_iter: 13
+test_iter: 25
 test_interval: 2000
 base_lr: 1e-3
 lr_policy: "fixed"
@@ -11,6 +11,6 @@ display: 20
 max_iter: 30000
 weight_decay: 0.0005
 snapshot: 1000
-snapshot_prefix: "snapshots/f1b1f2b2f4b4trgbslicebs8lr1e-3fixed"
+snapshot_prefix: "snapshots/f1b1f2b2f4b4trgbslicefidlbs4lr1e-3fixed"
 solver_mode: GPU 
 #solver_type: ADAGRAD

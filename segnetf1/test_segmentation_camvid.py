@@ -8,7 +8,7 @@ import math
 import pylab
 from PIL import Image
 from sklearn.preprocessing import normalize
-caffe_root = '/scratch/groups/lsdavis/yixi/software/caffe-segnet/' 			# Change this to the absolute directoy to SegNet Caffe
+caffe_root = '/scratch/groups/lsdavis/yixi/software/caffe-segnet-yixi/' 			# Change this to the absolute directoy to SegNet Caffe
 import sys
 sys.path.insert(0, caffe_root + 'python')
 import caffe
