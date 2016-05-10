@@ -33,10 +33,10 @@ do
 	trainprototxt=${cur_dir}/segnet_basic_train.prototxt
 	if [ "$slice" = true ];
 	then
-		trainprototxt=${work_dir}/segnet_basic_train_slice.prototxt
+		trainprototxt=${cur_dir}/segnet_basic_train_slice.prototxt
 		if [ "$fidl" = true ];
 		then
-			trainprototxt=${work_dir}/segnet_basic_train_slice_fidl.prototxt
+			trainprototxt=${cur_dir}/segnet_basic_train_slice_fidl.prototxt
 		fi
 	fi
 
@@ -46,13 +46,13 @@ do
 		inferenceprototxt=${cur_dir}/segnet_basic_inference_slice.prototxt
 		if [ "$fidl" = true ];
 		then
-			inferenceprototxt=${work_dir}/segnet_basic_inference_slice_fidl.prototxt
+			inferenceprototxt=${cur_dir}/segnet_basic_inference_slice_fidl.prototxt
 		fi
 	fi
 	
 	rm -r ${cur_dir}/inference/${xixi}_iter_${n}
 	mkdir ${cur_dir}/inference/${xixi}_iter_${n}
-	python ${work_dir}/compute_bn_statistics_lmdb.py \
+	python ${work_dir}/compute_bn_statistics_all.py \
 		${trainprototxt} \
 		${caffemodel} \
 		${cur_dir}/inference/${xixi}_iter_${n}/

@@ -11,12 +11,13 @@
 #SBATCH --partition=gpu
 #SBATCH --mem=5000
 
-xixi='f1b1f2b2trgbslicebs8lr1e-3fixed'
+xixi='f1b1f2b2trgbslicefidlbs4lr1e-3fixed'
 bs_bn=true
 slice=true
 fromrgb=true
-iter_s=8000
-iter_e=18000
+fidl=true
+iter_s=0
+iter_e=30000
 iter_gap=1000
 
 cur_dir=$PWD
@@ -49,6 +50,10 @@ do
 		if [ "$slice" = true ];
 		then
 			trainprototxt=${cur_dir}/segnet_basic_train_slice.prototxt
+			if [ "$fidl" = true ];
+			then
+				trainprototxt=${cur_dir}/segnet_basic_train_slice_fidl.prototxt
+			fi
 		fi
 	fi
 	
@@ -56,6 +61,10 @@ do
 	if [ "$slice" = true ];
 	then
 		inferenceprototxt=${cur_dir}/segnet_basic_inference_slice.prototxt
+		if [ "$fidl" = true ];
+		then
+			inferenceprototxt=${cur_dir}/segnet_basic_inference_slice_fidl.prototxt
+		fi
 	fi
 	echo $bs_bn
 	echo $slice

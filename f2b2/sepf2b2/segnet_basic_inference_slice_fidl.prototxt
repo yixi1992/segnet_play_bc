@@ -621,6 +621,13 @@ layer {
   }
 }
 layer {
+  name: "prob"
+  type: "Softmax"
+  bottom: "conv_classifier"
+  top: "prob"
+  softmax_param {engine: CAFFE}
+}
+layer {
   name: "loss"
   type: "SoftmaxWithLoss"
   bottom: "conv_classifier"
