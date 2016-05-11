@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -t 1:30:00
+#SBATCH -t 3:30:00
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH --mail-user=yixi@cs.umd.edu
@@ -12,8 +12,8 @@
 #SBATCH --mem=5000
 
 xixi='sepf1b1f2b2trgbslicefidlbs4lr1e-3fixed'
-iter_s=0
-iter_e=16000
+iter_s=17000
+iter_e=18000
 iter_gap=1000
 fidl=true
 slice=true

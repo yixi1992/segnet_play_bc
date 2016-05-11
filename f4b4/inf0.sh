@@ -16,8 +16,8 @@ bs=false
 slice=true
 fromrgb=true
 fidl=true
-iter_s=0
-iter_e=16000
+iter_s=17000
+iter_e=18000
 iter_gap=1000
 
 cur_dir=$PWD

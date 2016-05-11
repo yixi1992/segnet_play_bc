@@ -72,6 +72,10 @@ for i = 1:numClasses
     end
 end
 
+display(diag(conf))
+
+display(intoverunion)
+
 display([' Global acc = ' num2str(globalacc) ' Class average acc = ' num2str(sum(diag(conf))/(numClasses)) ' Mean Int over Union = ' num2str(sum(intoverunion)/(numClasses))]);
 
 display(['gtPath=',gtPath])
