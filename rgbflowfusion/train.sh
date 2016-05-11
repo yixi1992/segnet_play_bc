@@ -13,5 +13,5 @@
 
 
 
-~/work/yixi/software/caffe-segnet/build/tools/caffe train -gpu 0 -solver segnet_basic_solver.prototxt -snapshot snapshots/f1bs10lr1e-1fixed_iter_3000.solverstate
-
+#~/work/yixi/software/caffe-segnet/build/tools/caffe train -gpu 0 -solver segnet_basic_solver.prototxt -snapshot snapshots/f1bs10lr1e-1fixed_iter_3000.solverstate
+~/work/yixi/software/caffe-segnet/build/tools/caffe train -gpu 0 -solver segnet_basic_solver.prototxt -snapshot snapshots/flowonlybs10lr1e-3fixed_iter_10000.solverstate

@@ -24,7 +24,7 @@ python /home-4/yixi@umd.edu/segnet/surgery_flow.py \
 	-c /scratch/groups/lsdavis/yixi/segnet/repcamvid/snapshots/bs10lr0.1_iter_4200.caffemodel \
 	-t segnet_basic_train_defaultconv2.prototxt \
 	-o trainedrgbbs10conv2flow_surg.caffemodel \
-	--fromlayer='conv2','conv_decode2','conv_decode1','conv_decode2_bn' \
-	--tolayer='conv2_flow','conv_decode2_flow','conv_decode1_flow','conv_decode2_bn_flow' \
+	--fromlayer='conv1','conv2','conv_decode2','conv_decode1','conv_decode2_bn' \
+	--tolayer='conv1_flow','conv2_flow','conv_decode2_flow','conv_decode1_flow','conv_decode2_bn_flow' \
 
 
