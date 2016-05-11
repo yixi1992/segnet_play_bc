@@ -5,28 +5,11 @@ layer {
   top: "data0"
   top: "label"
   include {
-    phase: TRAIN
-  }
-  flow_image_data_param {
-	source: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidpiletrainvalfmp480360np_imagepair_txts/train.txt"
-    batch_size: 4
-    shuffle: true
-    new_height: 360
-    new_width: 480
-  }
-}
-layer {
-  name: "data"
-  type: "FlowImageData"
-  top: "data0"
-  top: "label"
-  include {
     phase: TEST
   }
   flow_image_data_param {
     source: "/scratch/groups/lsdavis/yixi/segnet/segnetf1/camvidpiletrainvalfmp480360np_imagepair_txts/test.txt"
-    batch_size: 4
-    shuffle: true
+    batch_size: 1
     new_height: 360
     new_width: 480
   }
@@ -46,7 +29,7 @@ layer {
   name: "normdata"
   type: "LRN"
   bottom: "data"
-  top: "normdata"
+  top: "data"
   lrn_param {
     local_size: 5
     alpha: 0.0001
@@ -58,7 +41,7 @@ layer {
   name: "normflow"
   type: "LRN"
   bottom: "flow"
-  top: "normflow"
+  top: "flow"
   lrn_param {
     local_size: 5
     alpha: 0.0001
@@ -68,7 +51,7 @@ layer {
 layer {
   name: "conv1_flow"
   type: "Convolution"
-  bottom: "normflow"
+  bottom: "flow"
   top: "conv1_flow"
   param {
     lr_mult: 1
@@ -82,7 +65,13 @@ layer {
     num_output: 64
     kernel_size: 7
     pad: 3
-  }
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+ }
 }
 layer {
   bottom: "conv1_flow"
@@ -90,7 +79,7 @@ layer {
   name: "conv1_flow_bn"
   type: "BN"
   bn_param {
-	bn_mode: LEARN
+	bn_mode: INFERENCE
 	scale_filler {
 	  type: "constant"
 	  value: 1
@@ -104,7 +93,7 @@ layer {
 layer {
   name: "conv1"
   type: "Convolution"
-  bottom: "normdata"
+  bottom: "data"
   top: "conv1"
   param {
     lr_mult: 1
@@ -132,7 +121,7 @@ layer {
   name: "conv1_bn"
   type: "BN"
   bn_param {
-	bn_mode: LEARN
+	bn_mode: INFERENCE
 	scale_filler {
 	  type: "constant"
 	  value: 1
@@ -187,7 +176,13 @@ layer {
     num_output: 64
     kernel_size: 7
     pad: 3
-  }
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
+ }
 }
 layer {
   bottom: "conv2"
@@ -195,7 +190,7 @@ layer {
   name: "conv2_bn"
   type: "BN"
   bn_param {
-	bn_mode: LEARN
+	bn_mode: INFERENCE
 	scale_filler {
 	  type: "constant"
 	  value: 1
@@ -255,7 +250,7 @@ layer {
   name: "conv3_bn"
   type: "BN"
   bn_param {
-	bn_mode: LEARN
+	bn_mode: INFERENCE
 	scale_filler {
 	  type: "constant"
 	  value: 1
@@ -315,7 +310,7 @@ layer {
   name: "conv4_bn"
   type: "BN"
   bn_param {
-	bn_mode: LEARN
+	bn_mode: INFERENCE
 	scale_filler {
 	  type: "constant"
 	  value: 1
@@ -386,7 +381,7 @@ layer {
   name: "conv_decode4_bn"
   type: "BN"
   bn_param {
-	bn_mode: LEARN
+	bn_mode: INFERENCE
 	scale_filler {
 	  type: "constant"
 	  value: 1
@@ -438,7 +433,7 @@ layer {
   name: "conv_decode3_bn"
   type: "BN"
   bn_param {
-	bn_mode: LEARN
+	bn_mode: INFERENCE
 	scale_filler {
 	  type: "constant"
 	  value: 1
@@ -476,12 +471,12 @@ layer {
     num_output: 128
     kernel_size: 7
     pad: 3
-  #  weight_filler {
-  #    type: "msra"
-  #  }
-  #  bias_filler {
-  #    type: "constant"
-  #  }
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
   }
 }
 layer {
@@ -490,7 +485,7 @@ layer {
   name: "conv_decode2_bn_flow"
   type: "BN"
   bn_param {
-	bn_mode: LEARN
+	bn_mode: INFERENCE
 	scale_filler {
 	  type: "constant"
 	  value: 1
@@ -528,12 +523,12 @@ layer {
     num_output: 64
     kernel_size: 7
     pad: 3
-#    weight_filler {
-#      type: "msra"
-#    }
-#    bias_filler {
-#      type: "constant"
-#    }
+    weight_filler {
+      type: "msra"
+    }
+    bias_filler {
+      type: "constant"
+    }
   }
 }
 layer {
@@ -542,7 +537,7 @@ layer {
   name: "conv_decode1_bn"
   type: "BN"
   bn_param {
-	bn_mode: LEARN
+	bn_mode: INFERENCE
 	scale_filler {
 	  type: "constant"
 	  value: 1
@@ -577,15 +572,6 @@ layer {
     }
   }
 }
-#layer {
-#  name: "argmax"
-#  type: "ArgMax"
-#  bottom: "conv_classifier"
-#  top: "argmax"
-#  argmax_param {
-#    axis: 1
-#  }
-#}
 layer {
   name: "loss"
   type: "SoftmaxWithLoss"
@@ -617,4 +603,11 @@ layer {
   bottom: "label"
   top: "accuracy"
   top: "per_class_accuracy"
+}
+layer {
+  name: "prob"
+  type: "Softmax"
+  bottom: "conv_classifier"
+  top: "prob"
+  softmax_param {engine: CAFFE}
 }

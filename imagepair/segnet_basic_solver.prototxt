@@ -1,4 +1,4 @@
-net: "/home-4/yixi@umd.edu/segnet/sepf1/segnet_basic_train_fidl.prototxt"
+net: "segnet_basic_train_fidl.prototxt"
 test_initialization: true
 test_iter: 25
 test_interval: 10
@@ -8,9 +8,9 @@ gamma: 0.9
 stepsize: 100
 display: 20
 #momentum: 0.9
-max_iter: 300
+max_iter: 30000
 weight_decay: 0.0005
-snapshot: 100
-snapshot_prefix: "/home-4/yixi@umd.edu/segnet/sepf1/snapshots/sepf1fidltrgbbs4lr1e-3fixed"
+snapshot: 1000
+snapshot_prefix: "snapshots/imagepairsepfidltrgbbs4lr1e-3fixed"
 solver_mode: GPU 
 #solver_type: ADAGRAD
